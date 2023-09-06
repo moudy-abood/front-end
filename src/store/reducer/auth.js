@@ -1,10 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    email: '',
-    password: '',
-    name: '',
-    phoneNumber: '',
     token: null,
     error: null,
     loading: false
@@ -35,7 +31,6 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: null,
-                userId: null
             }    
         default:
             return state;

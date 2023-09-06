@@ -40,8 +40,7 @@ export const auth = (data) => {
             dispatch(authSuccess(res.data.idToken));
         })
         .catch(err => {
-            console.log(err.response.data.validation.body.message);
-            dispatch(authFail(err.error))
+            dispatch(authFail(err.response.data.validation.body.message))
         })
         
     }
