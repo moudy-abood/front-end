@@ -47,8 +47,8 @@ export const auth = (data) => {
 }
 
 export const logout = () => {
-        localStorage.removeItem('token');
-        return {
-            type: actionTypes.AUTH_LOGOUT
-        }
+    localStorage.removeItem('token');
+    return {
+        type: actionTypes.AUTH_LOGOUT
     }
+}

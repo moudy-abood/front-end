@@ -4,14 +4,14 @@ import { fetchProfile } from '../../store/actions/profile';
 
 
 function Profile() {
-    const profileData= useSelector(state=> state.profileReducer)
+    const { name, phoneNumber, email }= useSelector(state=> state.profileReducer)
     const dispatch =useDispatch()
     dispatch(fetchProfile())
     return (
         <div>
-            <p>{profileData.name}</p>
-            <p>{profileData.phoneNumber}</p>
-            <p>{profileData.email}</p>
+            <p>{name}</p>
+            <p>{phoneNumber}</p>
+            <p>{email}</p>
         </div>
     )
 }

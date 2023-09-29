@@ -31,13 +31,13 @@ export const createAddress = (data) => {
                 street: data.street,
                 postalCode: data.postalCode
         }
-        const url = 'http://localhost:3000/address'
             const token = localStorage.getItem('token')
-            const config = {
-                headers: { Authorization: `Bearer ${token}`}
-            }
+            const configs = axios.create({
+                headers: { Authorization: `Bearer ${token}`},
+                baseURL: 'http://localhost:3000'
+            })
 
-            axios.post(url, addressData, config)
+            configs.post('/address',addressData)
             .then(res => {
                 dispatch(addressSuccess())
             })

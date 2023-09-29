@@ -71,7 +71,9 @@ function Address () {
             />
         </label>
         </div>
-        <button type='submit'>
+        <button 
+            onSubmit={submitHandler}
+            type='submit'>
             Submit
         </button>
         </form>
