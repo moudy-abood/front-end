@@ -1,23 +1,23 @@
 import { Link } from "react-router-dom";
 
 const Layout = () => {
-    return (
+  return (
     <div>
-        <nav>
+      <nav>
         <ul>
-            <li>
+          <li>
             <Link to="/user">User</Link>
-            </li>
-            <li>
+          </li>
+          <li>
             <Link to="/address">Address</Link>
-            </li>
-            <li>
+          </li>
+          <li>
             <Link to="/user/profile">Profile</Link>
-            </li>
+          </li>
         </ul>
-        </nav>
+      </nav>
     </div>
-    )
+  );
 };
 
 export default Layout;

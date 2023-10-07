@@ -1,88 +1,84 @@
-import { useDispatch } from 'react-redux';
-import { auth, logout } from '../../store/actions/auth';
-import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { auth, logout } from "../../store/actions/user/auth";
+import React, { useState } from "react";
 
-function User () {
-    const [data, setData] = useState({
-        email: '',
-        password:'',
-        name: '',
-        phoneNumber: ''
-    })
-    
-    const dispatch = useDispatch();
+function User() {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    name: "",
+    phoneNumber: "",
+  });
 
-    const inputChangeHandler = (e) => {
+  const dispatch = useDispatch();
+
+  const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setData({
-        ...data,
-        [name]: value
-    })
-    }
+      ...data,
+      [name]: value,
+    });
+  };
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(auth(data))
-    }
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(auth(data));
+  };
 
-    return (
+  return (
+    <div>
+      <form onSubmit={submitHandler}>
         <div>
-        <form onSubmit={submitHandler}>
-            <div>
-            <label>
+          <label>
             Email
-            <input 
-            type='text'
-            name= 'email'
-            value={data.email}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="email"
+              value={data.email}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             Password
-            <input 
-            type='password'
-            name= 'password'
-            value={data.password}
-            onChange={inputChangeHandler}
+            <input
+              type="password"
+              name="password"
+              value={data.password}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             Name
-            <input 
-            type='text'
-            name= 'name'
-            value={data.name}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="name"
+              value={data.name}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             Phone Number
-            <input 
-            type='text'
-            name= 'phoneNumber'
-            value={data.phoneNumber}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="phoneNumber"
+              value={data.phoneNumber}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
-        <button 
-            onSubmit={submitHandler}
-            type='submit'>
-            Submit
+        <button onSubmit={submitHandler} type="submit">
+          Submit
         </button>
-        </form>
-        <button
-        onClick={() => dispatch(logout())}
-        >logout</button>
-        </div>
-    )
+      </form>
+      <button onClick={() => dispatch(logout())}>logout</button>
+    </div>
+  );
 }
 
 export default User;

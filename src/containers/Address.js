@@ -1,84 +1,82 @@
-import { useDispatch } from 'react-redux';
-import { createAddress } from '../store/actions/address';
-import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { createAddress } from "../store/actions/address/address";
+import React, { useState } from "react";
 
-function Address () {
-    const [data, setData] = useState({
-        country: '',
-        city:'',
-        street: '',
-        postalCode: ''
-    })
+function Address() {
+  const [data, setData] = useState({
+    country: "",
+    city: "",
+    street: "",
+    postalCode: "",
+  });
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-    const inputChangeHandler = (e) => {
-        const { name, value } = e.target;
-        setData({
-            ...data,
-            [name]: value
-        })
-    }
-    const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(createAddress(data))
-    }
+  const inputChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(createAddress(data));
+  };
 
-    return (
+  return (
+    <div>
+      <form onSubmit={submitHandler}>
         <div>
-        <form onSubmit={submitHandler}>
-            <div>
-            <label>
+          <label>
             Country
-            <input 
-            type='text'
-            name= 'country'
-            value={data.country}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="country"
+              value={data.country}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             City
-            <input 
-            type='text'
-            name= 'city'
-            value={data.city}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="city"
+              value={data.city}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             Street
-            <input 
-            type='text'
-            name= 'street'
-            value={data.street}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="street"
+              value={data.street}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
         <div>
-        <label>
+          <label>
             Postal Code
-            <input 
-            type='text'
-            name= 'postalCode'
-            value={data.postalCode}
-            onChange={inputChangeHandler}
+            <input
+              type="text"
+              name="postalCode"
+              value={data.postalCode}
+              onChange={inputChangeHandler}
             />
-        </label>
+          </label>
         </div>
-        <button 
-            onSubmit={submitHandler}
-            type='submit'>
-            Submit
+        <button onSubmit={submitHandler} type="submit">
+          Submit
         </button>
-        </form>
-        </div>
-    )
+      </form>
+    </div>
+  );
 }
 
 export default Address;
