@@ -1,22 +1,23 @@
-import * as actionTypes from "../actionTypes/user/user";
 import axios from "axios";
+
+import * as actionTypes from "../actionTypes/user/user";
 
 export const profileFetchStart = () => {
   return {
-    type: actionTypes.PROFILE_FETCH_START,
+    type: actionTypes.FETCH_PROFILE_START,
   };
 };
 
 export const profileFetchFail = (error) => {
   return {
-    type: actionTypes.PROFILE_FETCH_FAIL,
+    type: actionTypes.FETCH_PROFILE_FAIL,
     error,
   };
 };
 
 export const profileFetchSuccess = (payload) => {
   return {
-    type: actionTypes.PROFILE_FETCH_SUCCESS,
+    type: actionTypes.FETCH_PROFILE_SUCCESS,
     name: payload.name,
     phoneNumber: payload.phoneNumber,
     email: payload.email,

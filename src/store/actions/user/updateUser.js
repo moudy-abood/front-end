@@ -22,25 +22,23 @@ export const updateUserSuccess = () => {
 };
 
 export const updateUser = (data) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(updateUserStart());
-    const token = localStorage.getItem("token");
-    const configs = axios.create({
-      baseURL: "http://localhost:3000",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    configs
-      .put("/user", {
+    try {
+      const token = localStorage.getItem("token");
+      const configs = axios.create({
+        baseURL: "http://localhost:3000",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const response = await configs.put("/user", {
         email: data.email,
         password: data.password,
         name: data.name,
         phoneNumber: data.phoneNumber,
-      })
-      .then((res) => {
-        dispatch(updateUserSuccess());
-      })
-      .catch((err) => {
-        dispatch(updateUserFail(err.data));
       });
+      dispatch(updateUserSuccess(response));
+    } catch (err) {
+      dispatch(updateUserFail(err.data));
+    }
   };
 };
