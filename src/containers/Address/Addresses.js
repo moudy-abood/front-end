@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAddresses } from "../../store/actions/address/fetchAddress";
 import { updateAddress } from "../../store/actions/address/updateAddress";
+import { deleteAddress } from "../../store/actions/address/deleteAddress";
 
 function Addresses() {
   const dispatch = useDispatch();
@@ -37,6 +38,10 @@ function Addresses() {
     });
   };
 
+  const handleDeleteClick = (address) => {
+    dispatch(deleteAddress(address.uuid))
+  }
+
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setData({
@@ -53,6 +58,7 @@ function Addresses() {
         <p>{address.street}</p>
         <p>{address.postalCode}</p>
         <button onClick={() => handleUpdateClick(address)}>Update</button>
+        <button onClick={() => handleDeleteClick(address)}>Delete</button>
       </div>
     );
   });

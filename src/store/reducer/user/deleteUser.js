@@ -2,41 +2,34 @@ import * as actionTypes from "../../actions/actionTypes/user/user";
 
 const initialState = {
   uuid: "",
-  name: "",
-  phoneNumber: "",
-  email: "",
   loading: false,
   error: null,
 };
 
-const profileReducer = (state = initialState, action) => {
+export const deleteUserReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.FETCH_PROFILE_START:
+    case actionTypes.DELETE_PROFILE_START:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.FETCH_PROFILE_FAIL:
+    case actionTypes.DELETE_PROFILE_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
       };
-    case actionTypes.FETCH_PROFILE_SUCCESS:
+    case actionTypes.DELETE_PROFILE_SUCCESS:
       return {
         ...state,
+        uuid: action.payload,
         loading: false,
         error: null,
-        uuid: action.uuid,
-        name: action.name,
-        phoneNumber: action.phoneNumber,
-        email: action.email,
       };
-
     default:
       return state;
   }
 };
 
-export default profileReducer;
+export default deleteUserReducer;

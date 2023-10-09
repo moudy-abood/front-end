@@ -18,6 +18,7 @@ export const profileFetchFail = (error) => {
 export const profileFetchSuccess = (payload) => {
   return {
     type: actionTypes.FETCH_PROFILE_SUCCESS,
+    uuid: payload.uuid,
     name: payload.name,
     phoneNumber: payload.phoneNumber,
     email: payload.email,

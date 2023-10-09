@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../store/actions/user/updateUser";
 import { fetchProfile } from "../../store/actions/user/profile";
+import { deleteUser } from "../../store/actions/user/deleteUser";
 
 function Profile() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchProfile());
   }, [dispatch]);
-  const { name, phoneNumber, email } = useSelector(
+  const { name, phoneNumber, email, uuid } = useSelector(
     (state) => state.profileReducer
   );
+  
   const [isUpdating, setIsUpdating] = useState(false);
   const [data, setData] = useState({
     email,
@@ -32,6 +34,12 @@ function Profile() {
     setIsUpdating(false);
     dispatch(updateUser(data));
   };
+
+  const handleDeleteClick = (uuid) => {
+    setIsUpdating(false);
+    dispatch(deleteUser(uuid));
+  };
+
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setData({
@@ -46,6 +54,7 @@ function Profile() {
       <p>{phoneNumber}</p>
       <p>{email}</p>
       <button onClick={handleUpdateClick}>Update</button>
+      <button onClick={() => handleDeleteClick(uuid)}>Delete</button>
     </div>
   );
   if (isUpdating) {
