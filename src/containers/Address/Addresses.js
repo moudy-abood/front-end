@@ -25,6 +25,7 @@ function Addresses() {
   const handleSaveClick = () => {
     setIsUpdating(false);
     dispatch(updateAddress(data));
+    console.log(data);
   };
 
   const handleUpdateClick = (address) => {

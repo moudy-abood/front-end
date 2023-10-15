@@ -9,6 +9,10 @@ import deleteUserReducer from "./reducer/user/deleteUser";
 import updateAddressReducer from "./reducer/address/updateAddress";
 import fetchAddressReducer from "./reducer/address/fetchAddress";
 import deleteAddressReducer from "./reducer/address/deleteAddress";
+import createProductsReducer from "./reducer/products/createProducts";
+import fetchProductsReducer from "./reducer/products/fetchProducts";
+import updateProductReducer from "./reducer/products/updateProduct";
+import deleteProductReducer from "./reducer/products/deleteProduct";
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +23,11 @@ export const store = configureStore({
     addressReducer,
     fetchAddressReducer,
     updateAddressReducer,
-    deleteAddressReducer
+    deleteAddressReducer,
+    createProductsReducer,
+    fetchProductsReducer,
+    updateProductReducer,
+    deleteProductReducer
   },
   middleware: [thunk],
 });
