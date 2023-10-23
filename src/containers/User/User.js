@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
-import { auth, logout } from "../../store/actions/user/auth";
 import React, { useState } from "react";
+
+import { auth, logout } from "../../store/Actions/User/Auth";
+import { createCart } from "../../store/Actions/Cart";
 
 function User() {
   const [data, setData] = useState({
@@ -20,9 +22,10 @@ function User() {
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(auth(data));
+    await dispatch(auth(data));
+    dispatch(createCart());
   };
 
   return (

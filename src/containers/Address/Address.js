@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { createAddress } from "../../store/actions/address/address";
+import { createAddress } from "../../store/Actions/Address";
 import React, { useState } from "react";
 
 function Address() {

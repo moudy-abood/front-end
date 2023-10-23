@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../store/actions/user/updateUser";
-import { fetchProfile } from "../../store/actions/user/profile";
-import { deleteUser } from "../../store/actions/user/deleteUser";
+import {
+  fetchProfile,
+  updateUser,
+  deleteUser,
+} from "../../store/Actions/User/Profile";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -12,7 +14,7 @@ function Profile() {
   const { name, phoneNumber, email, uuid } = useSelector(
     (state) => state.profileReducer
   );
-  
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [data, setData] = useState({
     email,

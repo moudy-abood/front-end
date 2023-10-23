@@ -1,41 +1,64 @@
-import axios from "axios";
-
-import * as actionTypes from "../actionTypes/user/user";
-
-export const profileFetchStart = () => {
-  return {
-    type: actionTypes.FETCH_PROFILE_START,
-  };
-};
-
-export const profileFetchFail = (error) => {
-  return {
-    type: actionTypes.FETCH_PROFILE_FAIL,
-    error,
-  };
-};
-
-export const profileFetchSuccess = (payload) => {
-  return {
-    type: actionTypes.FETCH_PROFILE_SUCCESS,
-    uuid: payload.uuid,
-    name: payload.name,
-    phoneNumber: payload.phoneNumber,
-    email: payload.email,
-  };
-};
+import * as actionTypes from "../../ActionTypes/User/User";
+import * as services from "../../Services/UserServices";
 
 export const fetchProfile = () => async (dispatch) => {
-  dispatch(profileFetchStart());
+  dispatch({
+    type: actionTypes.FETCH_PROFILE,
+  });
   try {
-    const token = localStorage.getItem("token");
-    const configs = axios.create({
-      baseURL: "http://localhost:3000/user",
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await services.getProfileService();
+    dispatch({
+      type: actionTypes.FETCH_PROFILE_SUCCESS,
+      uuid: response.uuid,
+      name: response.name,
+      phoneNumber: response.phoneNumber,
+      email: response.email,
     });
-    const data = await configs.get("profile");
-    dispatch(profileFetchSuccess(data.data));
-  } catch (err) {
-    dispatch(profileFetchFail(err));
+  } catch (error) {
+    dispatch({
+      type: actionTypes.FETCH_PROFILE_FAIL,
+      error: error.message,
+    });
   }
+};
+
+export const updateUser = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.UPDATE_PROFILE,
+    });
+    try {
+      await services.updateUserService(data);
+      dispatch({
+        type: actionTypes.UPDATE_PROFILE_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.UPDATE_PROFILE_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const deleteUser = (uuid) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.DELETE_PROFILE,
+    });
+    try {
+      await services.deleteUserService(uuid);
+      localStorage.removeItem("token");
+      dispatch({
+        type: actionTypes.DELETE_PROFILE_SUCCESS,
+      });
+    } catch (error) {
+      dispatch(
+        {
+          type: actionTypes.DELETE_PROFILE_FAIL,
+          error: error.message,
+        } || "User not found"
+      );
+    }
+  };
 };

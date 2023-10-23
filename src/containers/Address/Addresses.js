@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAddresses } from "../../store/actions/address/fetchAddress";
-import { updateAddress } from "../../store/actions/address/updateAddress";
-import { deleteAddress } from "../../store/actions/address/deleteAddress";
+import {
+  fetchAddresses,
+  updateAddress,
+  deleteAddress,
+} from "../../store/Actions/Address";
 
 function Addresses() {
   const dispatch = useDispatch();
@@ -10,22 +12,19 @@ function Addresses() {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  const { addresses } = useSelector((state) => state.fetchAddressReducer);
+  const { addresses } = useSelector((state) => state.addressReducer);
   const [isUpdating, setIsUpdating] = useState(false);
   const [data, setData] = useState(
-    addresses.map((address) => {
-      return {
-        country: address.country,
-        city: address.city,
-        street: address.street,
-        postalCode: address.postalCode,
-      };
-    })
+    addresses.map((address) => ({
+      country: address?.country,
+      city: address?.city,
+      street: address?.street,
+      postalCode: address?.postalCode,
+    }))
   );
   const handleSaveClick = () => {
     setIsUpdating(false);
     dispatch(updateAddress(data));
-    console.log(data);
   };
 
   const handleUpdateClick = (address) => {
@@ -40,8 +39,8 @@ function Addresses() {
   };
 
   const handleDeleteClick = (address) => {
-    dispatch(deleteAddress(address.uuid))
-  }
+    dispatch(deleteAddress(address.uuid));
+  };
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;

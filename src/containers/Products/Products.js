@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchProducts } from "../../store/actions/products/fetchProducts";
-import { createProducts } from "../../store/actions/products/createProducts";
-import { updateProduct } from "../../store/actions/products/updateProduct";
-import { deleteProduct } from "../../store/actions/products/deleteProduct";
+import {
+  createProducts,
+  fetchProducts,
+  updateProduct,
+  deleteProduct,
+} from "../../store/Actions/Products";
+import { createItems } from "../../store/Actions/Items";
 
 function CreateProducts() {
   const dispatch = useDispatch();
@@ -13,7 +16,7 @@ function CreateProducts() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const { products } = useSelector((state) => state.fetchProductsReducer);
+  const { products } = useSelector((state) => state.productsReducer);
   const [isShow, setIsShow] = useState(false);
   const [isShowAll, setIsShowAll] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -66,6 +69,16 @@ function CreateProducts() {
   const handleSaveClick = () => {
     setIsUpdating(false);
     dispatch(updateProduct(formData));
+  };
+
+  const addToCartHandler = (item) => {
+    const currentItem = [
+      {
+        productId: item,
+        quantity: 1,
+      },
+    ];
+    dispatch(createItems(currentItem));
   };
 
   const submitHandler = (e) => {
@@ -143,6 +156,9 @@ function CreateProducts() {
           <p>{product.description}</p>
           <p>{product.price}</p>
           <button onClick={() => updateHandler(product)}>Update</button>
+          <button onClick={() => addToCartHandler(product.id)}>
+            addToCart
+          </button>
         </div>
       );
     });

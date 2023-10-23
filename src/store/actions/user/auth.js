@@ -1,30 +1,12 @@
 import axios from "axios";
 
-import * as actionTypes from "../actionTypes/user/auth";
-
-export const authStart = () => {
-  return {
-    type: actionTypes.AUTH_START,
-  };
-};
-
-export const authSuccess = (token) => {
-  return {
-    type: actionTypes.AUTH_SUCCESS,
-    idToken: token,
-  };
-};
-
-export const authFail = (error) => {
-  return {
-    type: actionTypes.AUTH_FAIL,
-    error,
-  };
-};
+import * as actionTypes from "../../ActionTypes/User/Auth";
 
 export const auth = (data) => {
   return async (dispatch) => {
-    dispatch(authStart());
+    dispatch({
+      type: actionTypes.AUTH_START,
+    });
     try {
       const authData = {
         email: data.email,
@@ -38,9 +20,15 @@ export const auth = (data) => {
       });
       const response = await configs.post("/user", authData);
       localStorage.setItem("token", response.data.token);
-      dispatch(authSuccess(response.data.idToken));
-    } catch (err) {
-      dispatch(authFail(err.response.data.validation.body.message));
+      dispatch({
+        type: actionTypes.AUTH_SUCCESS,
+        idToken: response.data.payload,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.AUTH_FAIL,
+        error: error.message,
+      });
     }
   };
 };
