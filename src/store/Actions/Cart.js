@@ -30,7 +30,7 @@ export const fetchCart = () => {
       const response = await services.getCartService();
       dispatch({
         type: actionTypes.FETCH_CART_SUCCESS,
-        cartUuid: response.cartUuid,
+        cartUuid: response.uuid,
         status: response.status,
         items: response.Items,
       });

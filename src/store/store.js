@@ -7,6 +7,7 @@ import addressReducer from "./Reducer/Address";
 import productsReducer from "./Reducer/Products";
 import cartReducer from "./Reducer/Cart";
 import itemsReducer from "./Reducer/Items";
+import orderReducer from "./Reducer/Order";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     productsReducer,
     cartReducer,
     itemsReducer,
+    orderReducer,
   },
   middleware: [thunk],
 });
