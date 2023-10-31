@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import * as actionTypes from "../ActionTypes/Order";
 import * as services from "../Services/OrderServices";
 

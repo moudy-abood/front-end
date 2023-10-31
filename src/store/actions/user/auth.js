@@ -33,6 +33,34 @@ export const auth = (data) => {
   };
 };
 
+export const login = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.LOGIN
+    })
+    try {
+      const loginData = {
+        email: data.email,
+        password: data.password,
+      };
+      const configs = axios.create({
+        baseURL: "http://localhost:3000",
+      });
+      const response = await configs.post("/user/login", loginData);
+      localStorage.setItem("token", response.data.token);
+      dispatch({
+        type: actionTypes.LOGIN_SUCCESS,
+        idToken: response.data.payload,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.LOGIN_FAIL,
+        error: error.message,
+      })
+    }
+  }
+}
+
 export const logout = () => {
   localStorage.removeItem("token");
   return {
