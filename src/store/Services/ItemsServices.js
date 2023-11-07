@@ -1,20 +1,18 @@
 import API from "./API";
 
-export const createItemService = async (data) => {
+export const createItemService = async (data,cartUuid) => {
   try {
-    const cartUuid = await API.get("/cart");
-    const item = await API.post(`/cart/${cartUuid.data.uuid}/item`, data);
+    const item = await API.post(`/cart/${cartUuid}/item`, data);
     return item;
   } catch (error) {
     Promise.reject(error);
   }
 };
 
-export const updateItemService = async (data) => {
+export const updateItemService = async (data, cartUuid) => {
   try {
-    const cartUuid = await API.get("/cart");
     const item = await API.put(
-      `/cart/${cartUuid.data.uuid}/item/${data.uuid}`,
+      `/cart/${cartUuid}/item/${data.uuid}`,
       { quantity: data.quantity }
     );
     return item;
@@ -23,10 +21,9 @@ export const updateItemService = async (data) => {
   }
 };
 
-export const deleteItemService = async (uuid) => {
+export const deleteItemService = async (uuid, cartUuid) => {
   try {
-    const cartUuid = await API.get("/cart");
-    const item = await API.delete(`/cart/${cartUuid.data.uuid}/item/${uuid}`);
+    const item = await API.delete(`/cart/${cartUuid}/item/${uuid}`);
     return item;
   } catch (error) {
     Promise.reject(error);

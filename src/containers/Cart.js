@@ -27,9 +27,9 @@ function Cart() {
     if (item.quantity > 1) {
       item.quantity = item.quantity - 1;
       setQuantity(item.quantity);
-      dispatch(updateItem(item));
+      dispatch(updateItem(item, cartUuid));
     } else {
-      dispatch(deleteItem(item.uuid));
+      dispatch(deleteItem(item.uuid, cartUuid));
     }
   };
 

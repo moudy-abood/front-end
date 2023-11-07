@@ -1,8 +1,6 @@
 import * as actionTypes from "../ActionTypes/Address";
 import * as services from "../Services/AddressServices";
 
-// ! merge success and failed actions inside the reducer itself, and use better names for your data.
-
 export const createAddress = (data) => {
   return async (dispatch) => {
     dispatch({
@@ -16,10 +14,9 @@ export const createAddress = (data) => {
         postalCode: data.postalCode,
       };
 
-      const response = await services.createAddressService(addressData);
+      await services.createAddressService(addressData);
       return dispatch({
         type: actionTypes.CREATE_ADDRESS_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({ type: actionTypes.CREATE_ADDRESS_FAIL, error: error.message });
@@ -53,10 +50,9 @@ export const updateAddress = (data) => {
       type: actionTypes.UPDATE_ADDRESS,
     });
     try {
-      const response = await services.updateAddressService(data);
+      await services.updateAddressService(data);
       dispatch({
         type: actionTypes.UPDATE_ADDRESS_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
@@ -73,17 +69,16 @@ export const deleteAddress = (uuid) => {
       type: actionTypes.DELETE_ADDRESS,
     });
     try {
-      const response = await services.deleteAddressService(uuid);
+      await services.deleteAddressService(uuid);
       dispatch({
         type: actionTypes.DELETE_ADDRESS_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch(
         {
           type: actionTypes.DELETE_ADDRESS_FAIL,
           error: error.message,
-        } || "Address no found"
+        } || "Address not found"
       );
     }
   };

@@ -8,15 +8,18 @@ import {
   deleteProduct,
 } from "../../store/Actions/Products";
 import { createItems } from "../../store/Actions/Items";
+import { fetchCart } from "../../store/Actions/Cart";
 
 function CreateProducts() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchCart());
   }, [dispatch]);
 
   const { products } = useSelector((state) => state.productsReducer);
+  const { cartUuid } = useSelector((state) => state.cartReducer);
   const [isShow, setIsShow] = useState(false);
   const [isShowAll, setIsShowAll] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -78,7 +81,7 @@ function CreateProducts() {
         quantity: 1,
       },
     ];
-    dispatch(createItems(currentItem));
+    dispatch(createItems(currentItem, cartUuid));
   };
 
   const submitHandler = (e) => {

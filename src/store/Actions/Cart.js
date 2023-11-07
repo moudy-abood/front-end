@@ -7,10 +7,9 @@ export const createCart = () => {
       type: actionTypes.CREATE_CART,
     });
     try {
-      const response = await services.createCartService();
+      await services.createCartService();
       dispatch({
         type: actionTypes.CREATE_CART_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({

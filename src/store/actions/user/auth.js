@@ -1,6 +1,5 @@
-import axios from "axios";
-
 import * as actionTypes from "../../ActionTypes/User/Auth";
+import API from "../../Services/API";
 
 export const auth = (data) => {
   return async (dispatch) => {
@@ -13,12 +12,9 @@ export const auth = (data) => {
         password: data.password,
         name: data.name,
         phoneNumber: data.phoneNumber,
-        role: "ADMIN",
       };
-      const configs = axios.create({
-        baseURL: "http://localhost:3000",
-      });
-      const response = await configs.post("/user", authData);
+
+      const response = await API.post("/register", authData);
       localStorage.setItem("token", response.data.token);
       dispatch({
         type: actionTypes.AUTH_SUCCESS,
@@ -43,10 +39,7 @@ export const login = (data) => {
         email: data.email,
         password: data.password,
       };
-      const configs = axios.create({
-        baseURL: "http://localhost:3000",
-      });
-      const response = await configs.post("/user/login", loginData);
+      const response = await API.post("/login", loginData);
       localStorage.setItem("token", response.data.token);
       dispatch({
         type: actionTypes.LOGIN_SUCCESS,

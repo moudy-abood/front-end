@@ -1,16 +1,15 @@
 import * as actionTypes from "../ActionTypes/Items";
 import * as services from "../Services/ItemsServices";
 
-export const createItems = (data) => {
+export const createItems = (data,cartUuid) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.CREATE_ITEM,
     });
     try {
-      const response = await services.createItemService(data);
+      await services.createItemService(data, cartUuid);
       dispatch({
         type: actionTypes.CREATE_ITEM_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
@@ -21,16 +20,15 @@ export const createItems = (data) => {
   };
 };
 
-export const updateItem = (data) => {
+export const updateItem = (data, cartUuid) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.UPDATE_ITEM,
     });
     try {
-      const response = await services.updateItemService(data);
+      await services.updateItemService(data, cartUuid);
       dispatch({
         type: actionTypes.UPDATE_ITEM_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
@@ -41,16 +39,15 @@ export const updateItem = (data) => {
   };
 };
 
-export const deleteItem = (uuid) => {
+export const deleteItem = (uuid, cartUuid) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.DELETE_ITEM,
     });
     try {
-      const response = await services.deleteItemService(uuid);
+      await services.deleteItemService(uuid, cartUuid);
       dispatch({
         type: actionTypes.DELETE_ITEM_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({

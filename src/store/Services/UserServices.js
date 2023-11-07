@@ -2,7 +2,7 @@ import API from "./API";
 
 export const getProfileService = async () => {
   try {
-    const profile = await API.get("/user/profile");
+    const profile = await API.get("/user");
     return profile.data;
   } catch (error) {
     Promise.reject(error);

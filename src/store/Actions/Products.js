@@ -7,10 +7,9 @@ export const createProducts = (data) => {
       type: actionTypes.CREATE_PRODUCTS,
     });
     try {
-      const response = await services.createProductsService(data);
+      await services.createProductsService(data);
       dispatch({
         type: actionTypes.CREATE_PRODUCTS_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
@@ -47,10 +46,9 @@ export const updateProduct = (data) => {
       type: actionTypes.UPDATE_PRODUCT,
     });
     try {
-      const response = await services.updateProductService(data);
+      await services.updateProductService(data);
       dispatch({
         type: actionTypes.UPDATE_PRODUCT_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
@@ -67,10 +65,9 @@ export const deleteProduct = (data) => {
       type: actionTypes.DELETE_PRODUCT,
     });
     try {
-      const response = await services.deleteProductService(data);
+      await services.deleteProductService(data);
       dispatch({
         type: actionTypes.DELETE_PRODUCT_SUCCESS,
-        payload: response,
       });
     } catch (error) {
       dispatch({
