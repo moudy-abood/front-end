@@ -1,28 +1,28 @@
 import * as actionTypes from "../../ActionTypes/User/Auth";
 import API from "../../Services/API";
 
-export const auth = (data) => {
+export const signUp = (data) => {
   return async (dispatch) => {
     dispatch({
-      type: actionTypes.AUTH_START,
+      type: actionTypes.SIGNUP_START,
     });
     try {
-      const authData = {
+      const signUpData = {
         email: data.email,
         password: data.password,
         name: data.name,
         phoneNumber: data.phoneNumber,
       };
 
-      const response = await API.post("/register", authData);
+      const response = await API.post("/user", signUpData);
       localStorage.setItem("token", response.data.token);
       dispatch({
-        type: actionTypes.AUTH_SUCCESS,
+        type: actionTypes.SIGNUP_SUCCESS,
         idToken: response.data.payload,
       });
     } catch (error) {
       dispatch({
-        type: actionTypes.AUTH_FAIL,
+        type: actionTypes.SIGNUP_FAIL,
         error: error.message,
       });
     }
@@ -57,6 +57,6 @@ export const login = (data) => {
 export const logout = () => {
   localStorage.removeItem("token");
   return {
-    type: actionTypes.AUTH_LOGOUT,
+    type: actionTypes.LOGOUT,
   };
 };

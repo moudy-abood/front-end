@@ -1,6 +1,6 @@
 import API from "./API";
 
-export const listAddressesService = async () => {
+export const listUserAddressesService = async () => {
   try {
     const addresses = await API.get("/address");
     return addresses.data;

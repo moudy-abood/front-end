@@ -30,7 +30,7 @@ export const fetchAddresses = () => {
       type: actionTypes.FETCH_ADDRESSES,
     });
     try {
-      const response = await services.listAddressesService();
+      const response = await services.listUserAddressesService();
       dispatch({
         type: actionTypes.FETCH_ADDRESSES_SUCCESS,
         payload: response,
