@@ -24,12 +24,12 @@ function Home() {
     dispatch(fetchProducts(selectedPage));
   }
 
-  let pages = []
+  const pages = []
   for( let i = products?.totalPages; i >=1 ; i--){
     pages.unshift(i);
   }
 
-  const renderedPages = pages?.map((page) =>(
+  const renderedPages = pages.map((page) =>(
     <button key={page} onClick={()=>chosenPageHandler(page)}>{page}</button>
   ));
     const productsData = products.products?.map((product) => {
