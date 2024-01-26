@@ -9,9 +9,9 @@ export const createProductsService = async (data) => {
   }
 };
 
-export const getProductsService = async () => {
+export const getProductsService = async (page) => {
   try {
-    const products = await API.get("/product");
+    const products = await API.get(`/product/?page=${page || 1}`);
     return products.data;
   } catch (error) {
     Promise.reject(error);

@@ -4,7 +4,10 @@ const initialState = {
   products: [],
   product: {},
   uuid: "",
+  totalCount:'',
   loading: false,
+  totalPages:'',
+  currentPage:'',
   error: null,
 };
 
@@ -45,6 +48,8 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         products: action?.payload,
+        currentPage: action?.payload,
+        totalPages: action?.payload,
         loading: false,
         error: null,
       };
@@ -64,6 +69,7 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         product: action?.payload,
+        currentPage: action?.payload,
         loading: false,
         error: null,
       };

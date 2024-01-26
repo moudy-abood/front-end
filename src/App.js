@@ -9,13 +9,16 @@ import CreateProducts from "./containers/Products/Products";
 import Cart from "./containers/Cart";
 import Order from "./containers/Order";
 import Layout from "./navigation/Routes";
+
+import Home from "./containers/Home";
+
 import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />} />
+        <Route path="/" element={<Home />} />
         <Route path="/myAddress" element={<Addresses />} />
         <Route path="/user" element={<User />} />
         <Route path="/login" element={<Login />} />

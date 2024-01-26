@@ -20,13 +20,13 @@ export const createProducts = (data) => {
   };
 };
 
-export const fetchProducts = () => {
+export const fetchProducts = (page) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.FETCH_PRODUCTS,
     });
     try {
-      const response = await services.getProductsService();
+      const response = await services.getProductsService(page);
       dispatch({
         type: actionTypes.FETCH_PRODUCTS_SUCCESS,
         payload: response,
