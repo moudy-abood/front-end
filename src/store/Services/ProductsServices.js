@@ -40,3 +40,17 @@ export const deleteProductService = async (data) => {
     Promise.reject(error);
   }
 };
+
+export const searchBar = async (data) => {
+  const filter = { filterParameters: [{
+    op: 'like',
+    value: `%${data}%`,
+    key: 'title'
+  }]}
+  try {
+    const product = await API.get(`/product/list`,{params: filter});
+    return product.data;
+  } catch (error) {
+    Promise.reject(error);
+  }
+}

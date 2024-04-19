@@ -3,6 +3,7 @@ import * as actionTypes from "../ActionTypes/Products";
 const initialState = {
   products: [],
   product: {},
+  search: [],
   uuid: "",
   totalCount:'',
   loading: false,
@@ -53,6 +54,24 @@ const productsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
+      case actionTypes.SEARCH_BAR:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case actionTypes.SEARCH_BAR_SUCCESS:
+          return {
+            ...state,
+            search: action?.payload,
+            error: null,
+          };
+          case actionTypes.SEARCH_BAR_FAIL:
+            return {
+              ...state,
+              loading: false,
+              error: action?.error,
+            };
     case actionTypes.UPDATE_PRODUCT:
       return {
         ...state,

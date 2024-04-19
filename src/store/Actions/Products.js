@@ -77,3 +77,23 @@ export const deleteProduct = (data) => {
     }
   };
 };
+
+export const searchProducts = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.SEARCH_BAR,
+    });
+    try {
+      const response = await services.searchBar(data);
+      dispatch({
+        type: actionTypes.SEARCH_BAR_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.SEARCH_BAR_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
