@@ -18,6 +18,15 @@ export const getProductsService = async (page) => {
   }
 };
 
+export const getAllProductsService = async () => {
+  try {
+    const products = await API.get('/product/all')
+    return products.data;
+  } catch (error) {
+    Promise.reject(error);
+  }
+}
+
 export const updateProductService = async (data) => {
   try {
     const product = await API.put(`/product/${data.uuid}`, {
@@ -50,6 +59,15 @@ export const searchBar = async (data) => {
   try {
     const product = await API.get(`/product/list`,{params: filter});
     return product.data;
+  } catch (error) {
+    Promise.reject(error);
+  }
+}
+
+export const getProductsByCategory = async (data,page) => {
+  try {
+    const category = await API.get(`/product/category?category=${data}&page=${page||1}`)
+    return category.data
   } catch (error) {
     Promise.reject(error);
   }

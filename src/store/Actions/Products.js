@@ -20,6 +20,26 @@ export const createProducts = (data) => {
   };
 };
 
+export const fetchAllProducts = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.FETCH_PRODUCTS_ALL,
+    });
+    try {
+      const response = await services.getAllProductsService();
+      dispatch({
+        type: actionTypes.FETCH_PRODUCTS_ALL_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.FETCH_PRODUCTS_ALL_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
 export const fetchProducts = (page) => {
   return async (dispatch) => {
     dispatch({
@@ -97,3 +117,23 @@ export const searchProducts = (data) => {
     }
   };
 };
+
+export const getByCategory = (data,page) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.GET_BY_CATEGORY,
+    });
+    try {
+      const response = await services.getProductsByCategory(data,page);
+      dispatch({
+        type:actionTypes.GET_BY_CATEGORY_SUCCESS,
+        payload: response,
+      })
+    } catch (error) {
+      dispatch({
+        type: actionTypes.GET_BY_CATEGORY_FAIL,
+        error: error.message,
+      });
+    }
+  }
+}

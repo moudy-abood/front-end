@@ -2,8 +2,10 @@ import * as actionTypes from "../ActionTypes/Products";
 
 const initialState = {
   products: [],
+  allProducts: [],
   product: {},
   search: [],
+  category:"",
   uuid: "",
   totalCount:'',
   loading: false,
@@ -33,27 +35,66 @@ const productsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-    case actionTypes.FETCH_PRODUCTS:
+      case actionTypes.FETCH_PRODUCTS:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case actionTypes.FETCH_PRODUCTS_FAIL:
+        return {
+          ...state,
+          loading: false,
+          error: action?.error,
+        };
+      case actionTypes.FETCH_PRODUCTS_SUCCESS:
+        return {
+          ...state,
+          products: action?.payload,
+          currentPage: action?.payload,
+          totalPages: action?.payload,
+          loading: false,
+          error: null,
+        };
+    case actionTypes.FETCH_PRODUCTS_ALL:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.FETCH_PRODUCTS_FAIL:
+    case actionTypes.FETCH_PRODUCTS_ALL_FAIL:
       return {
         ...state,
         loading: false,
         error: action?.error,
       };
-    case actionTypes.FETCH_PRODUCTS_SUCCESS:
+    case actionTypes.FETCH_PRODUCTS_ALL_SUCCESS:
       return {
         ...state,
-        products: action?.payload,
-        currentPage: action?.payload,
-        totalPages: action?.payload,
+        allProducts: action?.payload,
         loading: false,
         error: null,
       };
+      case actionTypes.GET_BY_CATEGORY:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case actionTypes.GET_BY_CATEGORY_FAIL:
+        return {
+          ...state,
+          loading: false,
+          error: action?.error,
+        };
+      case actionTypes.GET_BY_CATEGORY_SUCCESS:
+        return {
+          ...state,
+          category: action?.payload,
+          loading: false,
+          error: null,
+        };  
+
       case actionTypes.SEARCH_BAR:
         return {
           ...state,
