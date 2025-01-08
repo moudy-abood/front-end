@@ -20,13 +20,13 @@ export const createProducts = (data) => {
   };
 };
 
-export const fetchAllProducts = () => {
+export const fetchAllProducts = (data, page) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.FETCH_PRODUCTS_ALL,
     });
     try {
-      const response = await services.getAllProductsService();
+      const response = await services.getAllProductsService(data, page);
       dispatch({
         type: actionTypes.FETCH_PRODUCTS_ALL_SUCCESS,
         payload: response,
@@ -40,6 +40,46 @@ export const fetchAllProducts = () => {
   };
 };
 
+export const selectedPage = (page) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.GET_CURRENT_PAGE,
+    });
+    try {
+      const response = await services.selectedPage(page);
+      dispatch({
+        type: actionTypes.GET_CURRENT_PAGE_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.GET_CURRENT_PAGE_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const selectedCategory = (category) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.SELECTED_CATEGORY,
+    });
+    try {
+      const response = await services.selectedCategory(category);
+      dispatch({
+        type: actionTypes.SELECTED_CATEGORY_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.SELECTED_CATEGORY_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+// this function might not be needed, keeping it for later
 export const fetchProducts = (page) => {
   return async (dispatch) => {
     dispatch({
@@ -54,6 +94,26 @@ export const fetchProducts = (page) => {
     } catch (error) {
       dispatch({
         type: actionTypes.FETCH_PRODUCTS_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const getProductsByCategory = (data, page) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.GET_PRODUCTS_BY_CATEGORY,
+    });
+    try {
+      const response = await services.getProductsByCategory(data, page);
+      dispatch({
+        type: actionTypes.GET_PRODUCTS_BY_CATEGORY_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.GET_PRODUCTS_BY_CATEGORY_FAIL,
         error: error.message,
       });
     }
@@ -118,22 +178,22 @@ export const searchProducts = (data) => {
   };
 };
 
-export const getByCategory = (data,page) => {
+export const getCategories = () => {
   return async (dispatch) => {
     dispatch({
-      type: actionTypes.GET_BY_CATEGORY,
+      type: actionTypes.GET_CATEGORIES,
     });
     try {
-      const response = await services.getProductsByCategory(data,page);
+      const response = await services.getCategories();
       dispatch({
-        type:actionTypes.GET_BY_CATEGORY_SUCCESS,
+        type: actionTypes.GET_CATEGORIES_SUCCESS,
         payload: response,
-      })
+      });
     } catch (error) {
       dispatch({
-        type: actionTypes.GET_BY_CATEGORY_FAIL,
+        type: actionTypes.GET_CATEGORIES_FAIL,
         error: error.message,
       });
     }
-  }
-}
+  };
+};

@@ -5,7 +5,7 @@ export const listUserAddressesService = async () => {
     const addresses = await API.get("/address");
     return addresses.data;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -14,7 +14,7 @@ export const createAddressService = async (addressData) => {
     const createdAddress = await API.post("/address", addressData);
     return createdAddress;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -28,7 +28,7 @@ export const updateAddressService = async (data) => {
     });
     return address;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -37,6 +37,6 @@ export const deleteAddressService = async (uuid) => {
     const address = await API.delete(`/address/${uuid}`);
     return address;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };

@@ -23,7 +23,7 @@ export const signUp = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.SIGNUP_FAIL,
-        error: error.message,
+        error: error,
       });
     }
   };

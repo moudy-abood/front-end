@@ -4,13 +4,16 @@ const initialState = {
   products: [],
   allProducts: [],
   product: {},
-  search: [],
-  category:"",
+  search: "",
+  category: [],
+  productsByCategory: [],
+  selectedCategory: "",
   uuid: "",
-  totalCount:'',
+  page: 1,
+  totalCount: "",
+  totalPages: "",
+  currentPage: "",
   loading: false,
-  totalPages:'',
-  currentPage:'',
   error: null,
 };
 
@@ -35,27 +38,27 @@ const productsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-      case actionTypes.FETCH_PRODUCTS:
-        return {
-          ...state,
-          loading: true,
-          error: null,
-        };
-      case actionTypes.FETCH_PRODUCTS_FAIL:
-        return {
-          ...state,
-          loading: false,
-          error: action?.error,
-        };
-      case actionTypes.FETCH_PRODUCTS_SUCCESS:
-        return {
-          ...state,
-          products: action?.payload,
-          currentPage: action?.payload,
-          totalPages: action?.payload,
-          loading: false,
-          error: null,
-        };
+    case actionTypes.FETCH_PRODUCTS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.FETCH_PRODUCTS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.FETCH_PRODUCTS_SUCCESS:
+      return {
+        ...state,
+        products: action?.payload,
+        currentPage: action?.payload,
+        totalPages: action?.payload,
+        loading: false,
+        error: null,
+      };
     case actionTypes.FETCH_PRODUCTS_ALL:
       return {
         ...state,
@@ -75,44 +78,100 @@ const productsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-      case actionTypes.GET_BY_CATEGORY:
-        return {
-          ...state,
-          loading: true,
-          error: null,
-        };
-      case actionTypes.GET_BY_CATEGORY_FAIL:
-        return {
-          ...state,
-          loading: false,
-          error: action?.error,
-        };
-      case actionTypes.GET_BY_CATEGORY_SUCCESS:
-        return {
-          ...state,
-          category: action?.payload,
-          loading: false,
-          error: null,
-        };  
+    case actionTypes.GET_CATEGORIES:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.GET_CATEGORIES_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.GET_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        category: action?.payload,
+        loading: false,
+        error: null,
+      };
 
-      case actionTypes.SEARCH_BAR:
-        return {
-          ...state,
-          loading: true,
-          error: null,
-        };
-      case actionTypes.SEARCH_BAR_SUCCESS:
-          return {
-            ...state,
-            search: action?.payload,
-            error: null,
-          };
-          case actionTypes.SEARCH_BAR_FAIL:
-            return {
-              ...state,
-              loading: false,
-              error: action?.error,
-            };
+    case actionTypes.GET_PRODUCTS_BY_CATEGORY:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.GET_PRODUCTS_BY_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.GET_PRODUCTS_BY_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        productsByCategory: action?.payload,
+        loading: false,
+        error: null,
+      };
+
+    case actionTypes.SEARCH_BAR:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.SEARCH_BAR_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.SEARCH_BAR_SUCCESS:
+      return {
+        ...state,
+        search: action?.payload,
+        error: null,
+      };
+    case actionTypes.GET_CURRENT_PAGE:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.GET_CURRENT_PAGE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.GET_CURRENT_PAGE_SUCCESS:
+      return {
+        ...state,
+        page: action?.payload,
+        error: null,
+      };
+    case actionTypes.SELECTED_CATEGORY:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.SELECTED_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.SELECTED_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        selectedCategory: action?.payload,
+        error: null,
+      };
     case actionTypes.UPDATE_PRODUCT:
       return {
         ...state,
@@ -152,7 +211,6 @@ const productsReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-
     default:
       return state;
   }

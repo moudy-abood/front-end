@@ -17,7 +17,7 @@ export const updateItemService = async (data, cartUuid) => {
     );
     return item;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -26,6 +26,6 @@ export const deleteItemService = async (uuid, cartUuid) => {
     const item = await API.delete(`/cart/${cartUuid}/item/${uuid}`);
     return item;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };

@@ -5,7 +5,7 @@ export const getProfileService = async () => {
     const profile = await API.get("/user");
     return profile.data;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -19,7 +19,7 @@ export const updateUserService = async (data) => {
     });
     return user;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -28,6 +28,6 @@ export const deleteUserService = async (uuid) => {
     const user = await API.delete(`/user/${uuid}`);
     return user;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };

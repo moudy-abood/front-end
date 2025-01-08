@@ -5,7 +5,7 @@ export const createCartService = async () => {
     const cart = await API.post("/cart");
     return cart;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
 
@@ -14,6 +14,6 @@ export const getCartService = async () => {
     const cart = await API.get(`/cart`);
     return cart.data;
   } catch (error) {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 };
