@@ -1,4 +1,5 @@
 import API from "./API";
+import { filtersHelper } from "../../utils/helpers";
 
 export const createProductsService = async (data) => {
   try {
@@ -19,17 +20,10 @@ export const getProductsService = async (page) => {
   }
 };
 
-export const getAllProductsService = async (data = "", page = 1) => {
-  const filters = {
-    filterParameters: [
-      {
-        op: "like",
-        key: "title",
-        value: `%${data}%`,
-      },
-    ],
-    page,
-  };
+export const getAllProductsService = async ({ search, page }) => {
+  const filters = search
+    ? filtersHelper("like", "title", `%${search}%`, page)
+    : null;
   try {
     const products = await API.get("/product/", { params: filters });
     return products.data;
@@ -38,17 +32,8 @@ export const getAllProductsService = async (data = "", page = 1) => {
   }
 };
 
-export const getProductsByCategory = async (data = "", page = 1) => {
-  const filters = {
-    filterParameters: [
-      {
-        op: "eq",
-        key: "category",
-        value: `${data}`,
-      },
-    ],
-    page,
-  };
+export const getCategoryProducts = async ({ category, page }) => {
+  const filters = filtersHelper("eq", "category", category, page);
   try {
     const products = await API.get("/product/", { params: filters });
     return products.data;
@@ -75,30 +60,6 @@ export const deleteProductService = async (data) => {
   try {
     const product = await API.delete(`/product/${data.uuid}`);
     return product;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-export const searchBar = async (data) => {
-  try {
-    return data;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-export const selectedPage = async (page) => {
-  try {
-    return page;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-export const selectedCategory = async (category) => {
-  try {
-    return category;
   } catch (error) {
     return Promise.reject(error);
   }

@@ -1,5 +1,5 @@
-import * as actionTypes from "../ActionTypes/Products";
-import * as services from "../Services/ProductsServices";
+import * as actionTypes from "../ActionTypes/Product";
+import * as services from "../Services/ProductServices";
 
 export const createProducts = (data) => {
   return async (dispatch) => {
@@ -20,13 +20,13 @@ export const createProducts = (data) => {
   };
 };
 
-export const fetchAllProducts = (data, page) => {
+export const fetchAllProducts = (options) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.FETCH_PRODUCTS_ALL,
     });
     try {
-      const response = await services.getAllProductsService(data, page);
+      const response = await services.getAllProductsService(options);
       dispatch({
         type: actionTypes.FETCH_PRODUCTS_ALL_SUCCESS,
         payload: response,
@@ -40,45 +40,6 @@ export const fetchAllProducts = (data, page) => {
   };
 };
 
-export const selectedPage = (page) => {
-  return async (dispatch) => {
-    dispatch({
-      type: actionTypes.GET_CURRENT_PAGE,
-    });
-    try {
-      const response = await services.selectedPage(page);
-      dispatch({
-        type: actionTypes.GET_CURRENT_PAGE_SUCCESS,
-        payload: response,
-      });
-    } catch (error) {
-      dispatch({
-        type: actionTypes.GET_CURRENT_PAGE_FAIL,
-        error: error.message,
-      });
-    }
-  };
-};
-
-export const selectedCategory = (category) => {
-  return async (dispatch) => {
-    dispatch({
-      type: actionTypes.SELECTED_CATEGORY,
-    });
-    try {
-      const response = await services.selectedCategory(category);
-      dispatch({
-        type: actionTypes.SELECTED_CATEGORY_SUCCESS,
-        payload: response,
-      });
-    } catch (error) {
-      dispatch({
-        type: actionTypes.SELECTED_CATEGORY_FAIL,
-        error: error.message,
-      });
-    }
-  };
-};
 // this function might not be needed, keeping it for later
 export const fetchProducts = (page) => {
   return async (dispatch) => {
@@ -100,13 +61,13 @@ export const fetchProducts = (page) => {
   };
 };
 
-export const getProductsByCategory = (data, page) => {
+export const getCategoryProducts = (options) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.GET_PRODUCTS_BY_CATEGORY,
     });
     try {
-      const response = await services.getProductsByCategory(data, page);
+      const response = await services.getCategoryProducts(options);
       dispatch({
         type: actionTypes.GET_PRODUCTS_BY_CATEGORY_SUCCESS,
         payload: response,
@@ -152,26 +113,6 @@ export const deleteProduct = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.DELETE_PRODUCT_FAIL,
-        error: error.message,
-      });
-    }
-  };
-};
-
-export const searchProducts = (data) => {
-  return async (dispatch) => {
-    dispatch({
-      type: actionTypes.SEARCH_BAR,
-    });
-    try {
-      const response = await services.searchBar(data);
-      dispatch({
-        type: actionTypes.SEARCH_BAR_SUCCESS,
-        payload: response,
-      });
-    } catch (error) {
-      dispatch({
-        type: actionTypes.SEARCH_BAR_FAIL,
         error: error.message,
       });
     }

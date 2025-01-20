@@ -1,4 +1,4 @@
-import * as actionTypes from "../ActionTypes/Products";
+import * as actionTypes from "../ActionTypes/Product";
 
 const initialState = {
   products: [],
@@ -7,12 +7,7 @@ const initialState = {
   search: "",
   category: [],
   productsByCategory: [],
-  selectedCategory: "",
   uuid: "",
-  page: 1,
-  totalCount: "",
-  totalPages: "",
-  currentPage: "",
   loading: false,
   error: null,
 };
@@ -115,61 +110,6 @@ const productsReducer = (state = initialState, action) => {
         ...state,
         productsByCategory: action?.payload,
         loading: false,
-        error: null,
-      };
-
-    case actionTypes.SEARCH_BAR:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case actionTypes.SEARCH_BAR_FAIL:
-      return {
-        ...state,
-        loading: false,
-        error: action?.error,
-      };
-    case actionTypes.SEARCH_BAR_SUCCESS:
-      return {
-        ...state,
-        search: action?.payload,
-        error: null,
-      };
-    case actionTypes.GET_CURRENT_PAGE:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case actionTypes.GET_CURRENT_PAGE_FAIL:
-      return {
-        ...state,
-        loading: false,
-        error: action?.error,
-      };
-    case actionTypes.GET_CURRENT_PAGE_SUCCESS:
-      return {
-        ...state,
-        page: action?.payload,
-        error: null,
-      };
-    case actionTypes.SELECTED_CATEGORY:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case actionTypes.SELECTED_CATEGORY_FAIL:
-      return {
-        ...state,
-        loading: false,
-        error: action?.error,
-      };
-    case actionTypes.SELECTED_CATEGORY_SUCCESS:
-      return {
-        ...state,
-        selectedCategory: action?.payload,
         error: null,
       };
     case actionTypes.UPDATE_PRODUCT:

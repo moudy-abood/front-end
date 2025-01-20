@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useSearchParams } from "react-router-dom";
 
 import ProductList from "./Products/ProductsList";
 import SearchBar from "./Header/SearchBar";
 import Categories from "./Header/Categories";
-import { fetchAllProducts } from "../store/Actions/Products";
+import { fetchAllProducts } from "../store/Actions/Product";
 import Pagination from "../components/Pagination";
+import { optionsHelper } from "../utils/helpers";
 
 function Home() {
-  // check if he just opened the site and use his query if it was not the first time or only refreshed etc
-  // use search params 'react-router-dom'
   const dispatch = useDispatch();
-
-  const { search, page } = useSelector((state) => state.productsReducer);
+  const [searchParams] = useSearchParams();
+  const options = useMemo(() => optionsHelper(searchParams), [searchParams]);
 
   useEffect(() => {
-    dispatch(fetchAllProducts(search, page));
-  }, [dispatch, search, page]);
+    dispatch(fetchAllProducts(options));
+  }, [dispatch, options]);
 
   return (
     <div>

@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import Pagination from "../../components/Pagination";
-import { getProductsByCategory } from "../../store/Actions/Products";
+import { getCategoryProducts } from "../../store/Actions/Product";
+import { optionsHelper } from "../../utils/helpers";
 
 function Category() {
   const dispatch = useDispatch();
 
-  const { productsByCategory, page, selectedCategory } = useSelector(
-    (state) => state.productsReducer
-  );
+  const [searchParams] = useSearchParams();
+  const options = useMemo(() => optionsHelper(searchParams), [searchParams]);
+
+  const { productsByCategory } = useSelector((state) => state.productsReducer);
 
   useEffect(() => {
-    dispatch(getProductsByCategory(selectedCategory, page));
-  }, [dispatch, page, selectedCategory]);
+    dispatch(getCategoryProducts(options));
+  }, [dispatch, options]);
 
   const products = productsByCategory?.products?.map((product) => {
     return (
@@ -25,6 +28,7 @@ function Category() {
       </div>
     );
   });
+
   return (
     <div>
       {products}

@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-
-import { useDispatch } from "react-redux";
-import { searchProducts } from "../../store/Actions/Products";
+import { useSearchParams } from "react-router-dom";
 
 function SearchBar() {
-  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const searchHandler = (data) => {
-    if (data.length && data) {
-      dispatch(searchProducts(data));
-      setSearchTerm("");
-    } else {
-      dispatch(searchProducts(''));
-    }
+  const searchHandler = (e) => {
+    e.preventDefault();
+    setSearchParams({ search: searchTerm });
   };
 
   const inputChangeHandler = (e) => {
@@ -27,14 +21,14 @@ function SearchBar() {
       placeholder="Search"
       value={searchTerm}
       onChange={inputChangeHandler}
-    ></input>
+    />
   );
 
   return (
-    <div>
+    <form onSubmit={searchHandler}>
       {searchInput}
-      <button onClick={() => searchHandler(searchTerm)}>🔎</button>
-    </div>
+      <button type="submit">🔎</button>
+    </form>
   );
 }
 

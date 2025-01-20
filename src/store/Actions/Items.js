@@ -1,5 +1,5 @@
 import * as actionTypes from "../ActionTypes/Items";
-import * as services from "../Services/ItemsServices";
+import * as services from "../Services/ItemServices";
 
 export const createItems = (data,cartUuid) => {
   return async (dispatch) => {

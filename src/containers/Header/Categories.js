@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { getCategories } from "../../store/Actions/Products";
-import { selectedCategory } from "../../store/Actions/Products";
+import { getCategories } from "../../store/Actions/Product";
 
-const Categories = () => {
+function Categories() {
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
-
   const { category } = useSelector((state) => state.productsReducer);
 
   const navigate = useNavigate();
@@ -22,9 +20,8 @@ const Categories = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (data) => {
-    dispatch(selectedCategory(data));
-    navigate("/category");
+  const handleOptionClick = (category) => {
+    navigate(`/categories?category=${category}`);
   };
 
   const allCategories = category?.map((category, i) => {
@@ -43,6 +40,6 @@ const Categories = () => {
       {isOpen && <ul>{allCategories}</ul>}
     </div>
   );
-};
+}
 
 export default Categories;

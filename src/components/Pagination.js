@@ -1,48 +1,42 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-
-import { selectedPage } from "../store/Actions/Products";
+import { useSelector } from "react-redux";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 function Pagination() {
   const location = useLocation().pathname;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { allProducts, productsByCategory } = useSelector(
     (state) => state.productsReducer
   );
-  const dispatch = useDispatch();
+  const currentPage = searchParams.get("page") || 1;
+
+  const productsMapper = {
+    "/categories": productsByCategory,
+    default: allProducts,
+  };
+
+  const productsData = productsMapper[location] || productsMapper.default;
 
   const nextPageHandler = () => {
-    const nextPage =
-      location === "/category"
-        ? Number(productsByCategory.currentPage) + 1
-        : Number(allProducts.currentPage) + 1;
-    dispatch(selectedPage(nextPage));
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      page: Number(currentPage) + 1,
+    });
   };
 
   const nextPage =
-    location === "/category" ? (
-      Number(productsByCategory.currentPage) ===
-      productsByCategory.totalPages ? null : (
-        <button onClick={nextPageHandler}>next</button>
-      )
-    ) : Number(allProducts.currentPage) === allProducts.totalPages ? null : (
+    Number(productsData.currentPage) === productsData.totalPages ? null : (
       <button onClick={nextPageHandler}>next</button>
     );
 
   const selectedPageHandler = (page) => {
-    dispatch(selectedPage(page));
+    setSearchParams({ ...Object.fromEntries(searchParams), page });
   };
 
   const pages = [];
-  if (location === "/category") {
-    for (let i = productsByCategory?.totalPages; i >= 1; i--) {
-      pages.unshift(i);
-    }
-  } else {
-    for (let i = allProducts?.totalPages; i >= 1; i--) {
-      pages.unshift(i);
-    }
+  for (let i = productsData?.totalPages; i >= 1; i--) {
+    pages.unshift(i);
   }
 
   const renderedPages = pages?.map((page) => {
