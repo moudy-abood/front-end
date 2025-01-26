@@ -7,8 +7,6 @@ function Login() {
   const [data, setData] = useState({
     email: "",
     password: "",
-    name: "",
-    phoneNumber: "",
   });
 
   const inputChangeHandler = (e) => {
@@ -19,9 +17,9 @@ function Login() {
     });
   };
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    await dispatch(login(data));
+    dispatch(login(data));
   };
   return (
     <div>

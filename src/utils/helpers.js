@@ -18,3 +18,8 @@ export const optionsHelper = (searchParams) => {
     page: searchParams.get("page") || 1,
   };
 };
+
+export const checkToken = () => {
+  const token = localStorage.getItem("token");
+  return token ? true : false;
+};

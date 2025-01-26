@@ -15,7 +15,7 @@ const Layout = () => {
             <Link to="/CreateAddress">CreateAddress</Link>
           </li>
           <li>
-            <Link to="/user/profile">Profile</Link>
+            <Link to="/profile">Profile</Link>
           </li>
           <li>
             <Link to="/myAddress">Addresses</Link>

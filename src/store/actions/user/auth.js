@@ -23,7 +23,8 @@ export const signUp = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.SIGNUP_FAIL,
-        error: error,
+        //this is only temporary
+        error: 'email already in use',
       });
     }
   };

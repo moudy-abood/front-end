@@ -1,7 +1,7 @@
 import * as actionTypes from "../../ActionTypes/User/Auth";
 
 const initialState = {
-  token: '',
+  token: null,
   error: null,
   loading: false,
 };

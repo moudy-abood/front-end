@@ -7,12 +7,22 @@ import SearchBar from "./Header/SearchBar";
 import Categories from "./Header/Categories";
 import { fetchAllProducts } from "../store/Actions/Product";
 import Pagination from "../components/Pagination";
-import { optionsHelper } from "../utils/helpers";
+import { checkToken, optionsHelper } from "../utils/helpers";
 
 function Home() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const options = useMemo(() => optionsHelper(searchParams), [searchParams]);
+  const isLoggedIn = checkToken();
+
+  //profile component is not ready yet
+
+  //not sure if this is the right approach for this
+  const loginStatus = isLoggedIn ? (
+    <Link to="/profile">Profile</Link>
+  ) : (
+    <Link to="/sign-up">Sign Up</Link>
+  );
 
   useEffect(() => {
     dispatch(fetchAllProducts(options));
@@ -20,7 +30,7 @@ function Home() {
 
   return (
     <div>
-      {/* <Link to="/sign-up">Sign Up</Link> */}
+      {loginStatus}
       <Categories />
       <SearchBar />
       <ProductList />
