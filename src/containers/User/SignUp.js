@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
 
 import { signUp } from "../../store/Actions/User/Auth";
 import { createCart } from "../../store/Actions/Cart";
+import { errorHandler, checkToken } from "../../utils/helpers";
 
 function User() {
   const [data, setData] = useState({
@@ -16,10 +18,11 @@ function User() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoggedIn = checkToken();
 
-  //todo: display validations errors
-  // const { error } = useSelector(state => state.authReducer)
-  // console.log(error);
+  const { error } = useSelector((state) => state.authReducer);
+
+  const errors = errorHandler(error, data);
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -29,18 +32,16 @@ function User() {
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    if (data.password === data.reEnteredPassword) {
-      dispatch(signUp(data));
-      dispatch(createCart());
+    const result = await dispatch(signUp(data));
+    await dispatch(createCart());
+    if (result.success) {
       navigate("/");
-    } else {
-      console.log("Password does not match");
     }
   };
 
-  return (
+  const signUpForm = (
     <div>
       <form onSubmit={submitHandler}>
         <div>
@@ -53,6 +54,7 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.email.typo || errors.email.alreadyUsed}</span>
         </div>
         <div>
           <label>
@@ -64,6 +66,9 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.password}</span>
+        </div>
+        <div>
           <label>
             Re-enter password
             <input
@@ -73,6 +78,7 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.reEnteredPassword}</span>
         </div>
         <div>
           <label>
@@ -85,6 +91,7 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.name}</span>
         </div>
         <div>
           <label>
@@ -97,6 +104,7 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.phoneNumber}</span>
         </div>
         <button type="submit">Sign Up</button>
       </form>
@@ -106,6 +114,10 @@ function User() {
       </div>
     </div>
   );
+
+  const contentToRender = isLoggedIn ? AlreadyLoggedIn : signUpForm;
+
+  return contentToRender;
 }
 
 export default User;

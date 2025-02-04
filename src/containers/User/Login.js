@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { login } from "../../store/Actions/User/Auth";
+import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
+import { errorHandler, checkToken } from "../../utils/helpers";
 
 function Login() {
   const dispatch = useDispatch();
@@ -8,6 +12,12 @@ function Login() {
     email: "",
     password: "",
   });
+
+  const { error, failedLogin } = useSelector((state) => state.authReducer);
+
+  const errors = errorHandler(error, failedLogin);
+  const navigate = useNavigate();
+  const isLoggedIn = checkToken();
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -17,11 +27,15 @@ function Login() {
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(login(data));
+    const result = await dispatch(login(data));
+    if (result.success) {
+      navigate("/");
+    }
   };
-  return (
+
+  const loginForm = (
     <div>
       <form onSubmit={submitHandler}>
         <div>
@@ -34,6 +48,7 @@ function Login() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.loginEmail}</span>
         </div>
         <div>
           <label>
@@ -45,13 +60,20 @@ function Login() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.loginPassword}</span>
         </div>
+        <span>{errors.failedLogin}</span>
         <button onSubmit={submitHandler} type="submit">
           Login
         </button>
       </form>
+      <span>{}</span>
     </div>
   );
+
+  const contentToRender = isLoggedIn ? AlreadyLoggedIn : loginForm;
+
+  return contentToRender;
 }
 
 export default Login;

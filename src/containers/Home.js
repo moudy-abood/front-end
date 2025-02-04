@@ -17,7 +17,6 @@ function Home() {
 
   //profile component is not ready yet
 
-  //not sure if this is the right approach for this
   const loginStatus = isLoggedIn ? (
     <Link to="/profile">Profile</Link>
   ) : (
