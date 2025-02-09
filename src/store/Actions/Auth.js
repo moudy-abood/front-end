@@ -1,5 +1,5 @@
-import * as actionTypes from "../../ActionTypes/User/Auth";
-import API from "../../Services/API";
+import * as actionTypes from "../ActionTypes/Auth";
+import API from "../Services/API";
 
 export const signUp = (data) => {
   return async (dispatch) => {

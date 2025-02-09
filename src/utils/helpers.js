@@ -24,15 +24,15 @@ export const checkToken = () => {
   return token;
 };
 
-export const errorHandler = (error, data) => {
+export const authErrorHandler = (error, data) => {
   return {
     email: {
       typo: error?.includes("email") ? error : "",
-      alreadyUsed: error === undefined ? "email already in use" : "",
+      alreadyUsed: error?.includes("already") ? "email already in use" : "",
     },
     password: error?.includes("password") ? error : "",
     reEnteredPassword:
-      data?.password === data?.reEnteredPassword
+      (data?.password || data?.newPassword) === data?.reEnteredPassword
         ? ""
         : "Password does not match",
     name: error?.includes("name") ? error : "",
@@ -40,5 +40,19 @@ export const errorHandler = (error, data) => {
     loginEmail: error?.includes("email") ? error : "",
     loginPassword: error?.includes("password") ? error : "",
     failedLogin: data ? "Wrong email or password" : "",
+    newPassword: error?.includes("newPassword") ? error : "",
+    oldPassword: {
+      typo: error?.includes("oldPassword") ? error : "",
+      wrongPassword: error?.includes("wrong password") ? error : "",
+    },
+  };
+};
+
+export const addressErrorHandler = (error) => {
+  return {
+    country: error?.includes("country") ? error : "",
+    city: error?.includes("city") ? error : "",
+    street: error?.includes("street") ? error : "",
+    postalCode: error?.includes("postalCode") ? error : "",
   };
 };

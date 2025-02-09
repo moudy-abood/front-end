@@ -27,6 +27,12 @@ const addressReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
+    case actionTypes.FETCH_ADDRESSES:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
     case actionTypes.FETCH_ADDRESSES_FAIL:
       return {
         ...state,
@@ -39,6 +45,31 @@ const addressReducer = (state = initialState, action) => {
         addresses: action?.payload,
         error: null,
         loading: false,
+      };
+    case actionTypes.FETCH_ADDRESS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.FETCH_ADDRESS_FAIL:
+      return {
+        ...state,
+        error: action?.error,
+        loading: false,
+      };
+    case actionTypes.FETCH_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        address: action?.payload,
+        error: null,
+        loading: false,
+      };
+    case actionTypes.UPDATE_ADDRESS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
       };
     case actionTypes.UPDATE_ADDRESS_FAIL:
       return {
@@ -54,6 +85,12 @@ const addressReducer = (state = initialState, action) => {
         postalCode: action?.postalCode,
         error: null,
         loading: false,
+      };
+    case actionTypes.DELETE_ADDRESS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
       };
     case actionTypes.DELETE_ADDRESS_FAIL:
       return {

@@ -1,107 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchAddresses,
-  updateAddress,
-  deleteAddress,
-} from "../../store/Actions/Address";
+import { Link, useNavigate } from "react-router-dom";
 
-function Addresses() {
+import { checkToken } from "../../utils/helpers";
+import { fetchAddresses } from "../../store/Actions/Address";
+
+function AddressList() {
   const dispatch = useDispatch();
+  const token = checkToken();
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (!token) navigate("/login");
     dispatch(fetchAddresses());
-  }, [dispatch]);
+  }, [dispatch, navigate, token]);
 
   const { addresses } = useSelector((state) => state.addressReducer);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [data, setData] = useState(
-    addresses.map((address) => ({
-      country: address?.country,
-      city: address?.city,
-      street: address?.street,
-      postalCode: address?.postalCode,
-    }))
-  );
-  const handleSaveClick = () => {
-    setIsUpdating(false);
-    dispatch(updateAddress(data));
-  };
 
-  const handleUpdateClick = (address) => {
-    setIsUpdating(true);
-    setData({
-      uuid: address.uuid,
-      country: address.country,
-      city: address.city,
-      street: address.street,
-      postalCode: address.postalCode,
-    });
-  };
-
-  const handleDeleteClick = (address) => {
-    dispatch(deleteAddress(address.uuid));
-  };
-
-  const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
-  };
-
-  let addressData = addresses.map((address) => {
+  const addressList = addresses?.map((address) => {
     return (
       <div key={address.uuid}>
         <p>{address.country}</p>
         <p>{address.city}</p>
         <p>{address.street}</p>
         <p>{address.postalCode}</p>
-        <button onClick={() => handleUpdateClick(address)}>Update</button>
-        <button onClick={() => handleDeleteClick(address)}>Delete</button>
+        <Link to={`/edit-address?edit=${address.uuid}`}>edit</Link>
       </div>
     );
   });
 
-  if (isUpdating) {
-    addressData = (
-      <div>
-        <form>
-          <div>
-            <label>
-              Country
-              <input type="text" name="country" onChange={inputChangeHandler} />
-            </label>
-          </div>
-          <div>
-            <label>
-              City
-              <input type="text" name="city" onChange={inputChangeHandler} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Street
-              <input type="text" name="street" onChange={inputChangeHandler} />
-            </label>
-          </div>
-          <div>
-            <label>
-              postalCode
-              <input
-                type="text"
-                name="postalCode"
-                onChange={inputChangeHandler}
-              />
-            </label>
-          </div>
-        </form>
-        <button onClick={handleSaveClick}>Save</button>
-      </div>
-    );
-  }
+  const renderedAddress = (
+    <div>
+      {addressList}
+      <Link to="/create-address">Add address</Link>
+    </div>
+  );
 
-  return <div>{addressData}</div>;
+  const noAddresses = (
+    <div>
+      <p> you don't have any addresses yet </p>
+      <Link to="/create-address">Add address</Link>
+    </div>
+  );
+
+  const contentToRender = addresses?.length ? renderedAddress : noAddresses;
+
+  return contentToRender;
 }
 
-export default Addresses;
+export default AddressList;

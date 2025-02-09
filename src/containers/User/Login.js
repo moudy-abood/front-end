@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { login } from "../../store/Actions/User/Auth";
+import { login } from "../../store/Actions/Auth";
 import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
-import { errorHandler, checkToken } from "../../utils/helpers";
+import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function Login() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ function Login() {
 
   const { error, failedLogin } = useSelector((state) => state.authReducer);
 
-  const errors = errorHandler(error, failedLogin);
+  const errors = authErrorHandler(error, failedLogin);
   const navigate = useNavigate();
   const isLoggedIn = checkToken();
 
@@ -67,7 +67,9 @@ function Login() {
           Login
         </button>
       </form>
-      <span>{}</span>
+      <div>
+        <Link to="/sign-up">Create new account</Link>
+      </div>
     </div>
   );
 

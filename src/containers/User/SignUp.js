@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
 
-import { signUp } from "../../store/Actions/User/Auth";
+import { signUp } from "../../store/Actions/Auth";
 import { createCart } from "../../store/Actions/Cart";
-import { errorHandler, checkToken } from "../../utils/helpers";
+import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function User() {
   const [data, setData] = useState({
@@ -22,7 +22,7 @@ function User() {
 
   const { error } = useSelector((state) => state.authReducer);
 
-  const errors = errorHandler(error, data);
+  const errors = authErrorHandler(error, data);
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;

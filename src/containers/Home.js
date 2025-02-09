@@ -15,8 +15,6 @@ function Home() {
   const options = useMemo(() => optionsHelper(searchParams), [searchParams]);
   const isLoggedIn = checkToken();
 
-  //profile component is not ready yet
-
   const loginStatus = isLoggedIn ? (
     <Link to="/profile">Profile</Link>
   ) : (
