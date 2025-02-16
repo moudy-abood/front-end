@@ -28,7 +28,7 @@ export const authErrorHandler = (error, data) => {
   return {
     email: {
       typo: error?.includes("email") ? error : "",
-      alreadyUsed: error?.includes("already") ? "email already in use" : "",
+      alreadyUsed: error? "email already in use" : "",
     },
     password: error?.includes("password") ? error : "",
     reEnteredPassword:

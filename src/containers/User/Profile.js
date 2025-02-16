@@ -22,6 +22,7 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [data, setData] = useState({
+    email: "",
     name: "",
     phoneNumber: "",
   });
@@ -29,6 +30,7 @@ function Profile() {
   const handleEditClick = () => {
     setIsEditing(true);
     setData({
+      email,
       name,
       phoneNumber,
     });
@@ -57,8 +59,8 @@ function Profile() {
     <div>
       <div>
         <p>{name}</p>
-        <p>{phoneNumber}</p>
         <p>{email}</p>
+        <p>{phoneNumber}</p>
         <button onClick={handleEditClick}>Edit profile</button>
       </div>
       <div>
@@ -84,6 +86,18 @@ function Profile() {
         </div>
         <div>
           <label>
+            Email
+            <input
+              type="text"
+              name="email"
+              value={data?.email}
+              onChange={inputChangeHandler}
+            />
+          </label>
+          <span>{errors.email.typo || errors.email.alreadyUsed}</span>
+        </div>
+        <div>
+          <label>
             Phone Number
             <input
               type="text"
@@ -98,7 +112,7 @@ function Profile() {
       </form>
       <button onClick={handleCancelClick}>Cancel</button>
       <div>
-        <Link to="/profile-credentials">change email or password</Link>
+        <Link to="/profile-credentials">Reset password</Link>
       </div>
     </div>
   );

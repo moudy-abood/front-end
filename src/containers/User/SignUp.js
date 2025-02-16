@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
 
 import { signUp } from "../../store/Actions/Auth";
 import { createCart } from "../../store/Actions/Cart";
@@ -18,7 +17,12 @@ function User() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = checkToken();
+  const token = checkToken();
+
+  useEffect(() => {
+    if (token) navigate("/");
+  },[token, navigate])
+
 
   const { error } = useSelector((state) => state.authReducer);
 
@@ -115,9 +119,8 @@ function User() {
     </div>
   );
 
-  const contentToRender = isLoggedIn ? AlreadyLoggedIn : signUpForm;
 
-  return contentToRender;
+  return signUpForm;
 }
 
 export default User;
