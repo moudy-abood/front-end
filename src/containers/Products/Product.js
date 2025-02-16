@@ -6,11 +6,11 @@ import {
   fetchProducts,
   updateProduct,
   deleteProduct,
-} from "../../store/Actions/Products";
+} from "../../store/Actions/Product";
 import { createItems } from "../../store/Actions/Items";
 import { fetchCart } from "../../store/Actions/Cart";
 
-function CreateProducts() {
+function CreateProduct() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -242,4 +242,4 @@ function CreateProducts() {
   );
 }
 
-export default CreateProducts;
+export default CreateProduct;

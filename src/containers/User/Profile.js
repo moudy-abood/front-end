@@ -1,45 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProfile,
-  updateUser,
-  deleteUser,
-} from "../../store/Actions/User/Profile";
+import { Link, useNavigate } from "react-router-dom";
+
+import { fetchUser, updateUser } from "../../store/Actions/User";
+import { checkToken, authErrorHandler } from "../../utils/helpers";
 
 function Profile() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchProfile());
-  }, [dispatch]);
-  const { name, phoneNumber, email, uuid } = useSelector(
+  const token = checkToken();
+  const navigate = useNavigate();
+
+  const { name, phoneNumber, email, error } = useSelector(
     (state) => state.profileReducer
   );
+  const errors = authErrorHandler(error);
 
-  const [isUpdating, setIsUpdating] = useState(false);
+  useEffect(() => {
+    if (!token) navigate("/login");
+    dispatch(fetchUser());
+  }, [dispatch, navigate, token]);
+
+  const [isEditing, setIsEditing] = useState(false);
   const [data, setData] = useState({
-    email,
-    password: "",
-    name,
-    phoneNumber,
+    name: "",
+    phoneNumber: "",
   });
 
-  const handleUpdateClick = () => {
-    setIsUpdating(true);
+  const handleEditClick = () => {
+    setIsEditing(true);
     setData({
-      email,
-      password: "",
       name,
       phoneNumber,
     });
   };
-  const handleSaveClick = () => {
-    setIsUpdating(false);
-    dispatch(updateUser(data));
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    const result = dispatch(updateUser(data));
+    if (result.success) {
+      setIsEditing(false);
+    }
   };
 
-  const handleDeleteClick = (uuid) => {
-    setIsUpdating(false);
-    dispatch(deleteUser(uuid));
+  const handleCancelClick = () => {
+    setIsEditing(false);
   };
 
   const inputChangeHandler = (e) => {
@@ -50,68 +53,56 @@ function Profile() {
     });
   };
 
-  let profile = (
+  const profile = (
     <div>
-      <p>{name}</p>
-      <p>{phoneNumber}</p>
-      <p>{email}</p>
-      <button onClick={handleUpdateClick}>Update</button>
-      <button onClick={() => handleDeleteClick(uuid)}>Delete</button>
+      <div>
+        <p>{name}</p>
+        <p>{phoneNumber}</p>
+        <p>{email}</p>
+        <button onClick={handleEditClick}>Edit profile</button>
+      </div>
+      <div>
+        <Link to="/address">Manage addresses</Link>
+      </div>
     </div>
   );
-  if (isUpdating) {
-    profile = (
+
+  const editProfile = (
+    <div>
+      <form onSubmit={handleSaveClick}>
+        <div>
+          <label>
+            Name
+            <input
+              type="text"
+              name="name"
+              value={data.name}
+              onChange={inputChangeHandler}
+            />
+          </label>
+          <span>{errors.name}</span>
+        </div>
+        <div>
+          <label>
+            Phone Number
+            <input
+              type="text"
+              name="phoneNumber"
+              value={data.phoneNumber}
+              onChange={inputChangeHandler}
+            />
+          </label>
+          <span>{errors.phoneNumber}</span>
+        </div>
+        <button type="submit">Save</button>
+      </form>
+      <button onClick={handleCancelClick}>Cancel</button>
       <div>
-        <form>
-          <div>
-            <label>
-              Email
-              <input
-                type="text"
-                name="email"
-                value={data.email}
-                onChange={inputChangeHandler}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Password
-              <input
-                type="password"
-                name="password"
-                value={data.password}
-                onChange={inputChangeHandler}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Name
-              <input
-                type="text"
-                name="name"
-                value={data.name}
-                onChange={inputChangeHandler}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Phone Number
-              <input
-                type="text"
-                name="phoneNumber"
-                value={data.phoneNumber}
-                onChange={inputChangeHandler}
-              />
-            </label>
-          </div>
-        </form>
-        <button onClick={handleSaveClick}>Save</button>
+        <Link to="/profile-credentials">change email or password</Link>
       </div>
-    );
-  }
-  return <div>{profile}</div>;
+    </div>
+  );
+  const contentToRender = isEditing ? editProfile : profile;
+  return contentToRender;
 }
 export default Profile;

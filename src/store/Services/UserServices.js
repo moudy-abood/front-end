@@ -1,25 +1,35 @@
 import API from "./API";
 
-export const getProfileService = async () => {
+export const getUserService = async () => {
   try {
     const profile = await API.get("/user");
     return profile.data;
   } catch (error) {
-    Promise.reject(error);
+    throw error.response?.data;
   }
 };
 
 export const updateUserService = async (data) => {
   try {
     const user = await API.put("/user", {
-      email: data.email,
-      password: data.password,
       name: data.name,
       phoneNumber: data.phoneNumber,
     });
     return user;
   } catch (error) {
-    Promise.reject(error);
+    throw error.response?.data;
+  }
+};
+
+export const updateUserCredentialsService = async (data) => {
+  try {
+    await API.put("/user/credentials", {
+      email: data.email,
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    });
+  } catch (error) {
+    throw error.response?.data;
   }
 };
 
@@ -28,6 +38,6 @@ export const deleteUserService = async (uuid) => {
     const user = await API.delete(`/user/${uuid}`);
     return user;
   } catch (error) {
-    Promise.reject(error);
+    throw error.response?.data;
   }
 };

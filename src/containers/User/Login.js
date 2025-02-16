@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "../../store/Actions/User/Auth";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
+import { login } from "../../store/Actions/Auth";
+import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
+import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function Login() {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
     password: "",
-    name: "",
-    phoneNumber: "",
   });
+
+  const { error, failedLogin } = useSelector((state) => state.authReducer);
+
+  const errors = authErrorHandler(error, failedLogin);
+  const navigate = useNavigate();
+  const isLoggedIn = checkToken();
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -21,9 +29,13 @@ function Login() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await dispatch(login(data));
+    const result = await dispatch(login(data));
+    if (result.success) {
+      navigate("/");
+    }
   };
-  return (
+
+  const loginForm = (
     <div>
       <form onSubmit={submitHandler}>
         <div>
@@ -36,6 +48,7 @@ function Login() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.loginEmail}</span>
         </div>
         <div>
           <label>
@@ -47,13 +60,22 @@ function Login() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.loginPassword}</span>
         </div>
+        <span>{errors.failedLogin}</span>
         <button onSubmit={submitHandler} type="submit">
           Login
         </button>
       </form>
+      <div>
+        <Link to="/sign-up">Create new account</Link>
+      </div>
     </div>
   );
+
+  const contentToRender = isLoggedIn ? AlreadyLoggedIn : loginForm;
+
+  return contentToRender;
 }
 
 export default Login;

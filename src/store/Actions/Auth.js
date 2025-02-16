@@ -1,5 +1,5 @@
-import * as actionTypes from "../../ActionTypes/User/Auth";
-import API from "../../Services/API";
+import * as actionTypes from "../ActionTypes/Auth";
+import API from "../Services/API";
 
 export const signUp = (data) => {
   return async (dispatch) => {
@@ -18,13 +18,14 @@ export const signUp = (data) => {
       localStorage.setItem("token", response.data.token);
       dispatch({
         type: actionTypes.SIGNUP_SUCCESS,
-        idToken: response.data.payload,
       });
+      return { success: true };
     } catch (error) {
       dispatch({
         type: actionTypes.SIGNUP_FAIL,
-        error: error.message,
+        error: error.response?.data?.validation?.body?.message,
       });
+      return { success: false };
     }
   };
 };
@@ -32,8 +33,8 @@ export const signUp = (data) => {
 export const login = (data) => {
   return async (dispatch) => {
     dispatch({
-      type: actionTypes.LOGIN
-    })
+      type: actionTypes.LOGIN,
+    });
     try {
       const loginData = {
         email: data.email,
@@ -43,16 +44,18 @@ export const login = (data) => {
       localStorage.setItem("token", response.data.token);
       dispatch({
         type: actionTypes.LOGIN_SUCCESS,
-        idToken: response.data.payload,
       });
+      return { success: true };
     } catch (error) {
       dispatch({
         type: actionTypes.LOGIN_FAIL,
-        error: error.message,
-      })
+        payload: error?.response,
+        error: error?.response?.data?.validation?.body?.message,
+      });
+      return { success: false };
     }
-  }
-}
+  };
+};
 
 export const logout = () => {
   localStorage.removeItem("token");

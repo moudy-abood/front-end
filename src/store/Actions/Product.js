@@ -1,5 +1,5 @@
-import * as actionTypes from "../ActionTypes/Products";
-import * as services from "../Services/ProductsServices";
+import * as actionTypes from "../ActionTypes/Product";
+import * as services from "../Services/ProductServices";
 
 export const createProducts = (data) => {
   return async (dispatch) => {
@@ -20,6 +20,27 @@ export const createProducts = (data) => {
   };
 };
 
+export const fetchAllProducts = (options) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.FETCH_PRODUCTS_ALL,
+    });
+    try {
+      const response = await services.getAllProductsService(options);
+      dispatch({
+        type: actionTypes.FETCH_PRODUCTS_ALL_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.FETCH_PRODUCTS_ALL_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+// this function might not be needed, keeping it for later
 export const fetchProducts = (page) => {
   return async (dispatch) => {
     dispatch({
@@ -34,6 +55,26 @@ export const fetchProducts = (page) => {
     } catch (error) {
       dispatch({
         type: actionTypes.FETCH_PRODUCTS_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const getCategoryProducts = (options) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.GET_PRODUCTS_BY_CATEGORY,
+    });
+    try {
+      const response = await services.getCategoryProducts(options);
+      dispatch({
+        type: actionTypes.GET_PRODUCTS_BY_CATEGORY_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.GET_PRODUCTS_BY_CATEGORY_FAIL,
         error: error.message,
       });
     }
@@ -72,6 +113,26 @@ export const deleteProduct = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.DELETE_PRODUCT_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const getCategories = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.GET_CATEGORIES,
+    });
+    try {
+      const response = await services.getCategories();
+      dispatch({
+        type: actionTypes.GET_CATEGORIES_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.GET_CATEGORIES_FAIL,
         error: error.message,
       });
     }

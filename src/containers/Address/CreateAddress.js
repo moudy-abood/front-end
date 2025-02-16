@@ -1,8 +1,15 @@
-import { useDispatch } from "react-redux";
-import { createAddress } from "../../store/Actions/Address";
-import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Address() {
+import { createAddress } from "../../store/Actions/Address";
+import { checkToken } from "../../utils/helpers";
+import { addressErrorHandler } from "../../utils/helpers";
+
+function CreateAddress() {
+  const { error } = useSelector((state) => state.addressReducer);
+  const errors = addressErrorHandler(error);
+
   const [data, setData] = useState({
     country: "",
     city: "",
@@ -11,6 +18,12 @@ function Address() {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = checkToken();
+
+  useEffect(() => {
+    if (!token) navigate("/login");
+  }, [navigate, token]);
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -19,9 +32,16 @@ function Address() {
       [name]: value,
     });
   };
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(createAddress(data));
+    const result = await dispatch(createAddress(data));
+    if (result.success) {
+      navigate("/address");
+    }
+  };
+
+  const cancelHandler = () => {
+    navigate("/address");
   };
 
   return (
@@ -37,6 +57,7 @@ function Address() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.country}</span>
         </div>
         <div>
           <label>
@@ -48,6 +69,7 @@ function Address() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.city}</span>
         </div>
         <div>
           <label>
@@ -59,6 +81,7 @@ function Address() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.street}</span>
         </div>
         <div>
           <label>
@@ -70,13 +93,15 @@ function Address() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.postalCode}</span>
         </div>
         <button onSubmit={submitHandler} type="submit">
-          Submit
+          Add
         </button>
       </form>
+      <button onClick={cancelHandler}>Cancel</button>
     </div>
   );
 }
 
-export default Address;
+export default CreateAddress;

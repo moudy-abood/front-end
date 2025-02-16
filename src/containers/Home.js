@@ -1,55 +1,39 @@
-import React, {  useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useSearchParams } from "react-router-dom";
 
-import { fetchProducts } from "../store/Actions/Products";
+import ProductList from "./Products/ProductsList";
+import SearchBar from "./Header/SearchBar";
+import Categories from "./Header/Categories";
+import { fetchAllProducts } from "../store/Actions/Product";
+import Pagination from "../components/Pagination";
+import { checkToken, optionsHelper } from "../utils/helpers";
 
 function Home() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.productsReducer);
+  const [searchParams] = useSearchParams();
+  const options = useMemo(() => optionsHelper(searchParams), [searchParams]);
+  const isLoggedIn = checkToken();
+
+  const loginStatus = isLoggedIn ? (
+    <Link to="/profile">Profile</Link>
+  ) : (
+    <Link to="/sign-up">Sign Up</Link>
+  );
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchAllProducts(options));
+  }, [dispatch, options]);
 
-  const nextPageHandler = () => {
-    const nextPage = Number(products.currentPage) + 1;
-    dispatch(fetchProducts(nextPage))
-  }
-
-  const firstPageHandler = () => {
-    dispatch(fetchProducts(1));
-  }
-
-  const chosenPageHandler = (selectedPage) => {
-    dispatch(fetchProducts(selectedPage));
-  }
-
-  const pages = []
-  for( let i = products?.totalPages; i >=1 ; i--){
-    pages.unshift(i);
-  }
-
-  const renderedPages = pages.map((page) =>(
-    <button key={page} onClick={()=>chosenPageHandler(page)}>{page}</button>
-  ));
-    const productsData = products.products?.map((product) => {
-      return (
-        <div key={product.uuid}>
-          <p>{product.category}</p>
-          <p>{product.title}</p>
-          <p>{product.description}</p>
-          <p>{product.price}</p>
-        </div>
-      );
-    });
-    return (
-        <div>
-            {productsData}
-            {Number(products.currentPage)>=4? <button onClick={firstPageHandler}>first</button>: null}
-            {renderedPages}
-            {Number(products.currentPage)===products.totalPages? null: <button onClick={nextPageHandler}>next</button>}
-        </div>
-    );
+  return (
+    <div>
+      {loginStatus}
+      <Categories />
+      <SearchBar />
+      <ProductList />
+      <Pagination />
+    </div>
+  );
 }
 
 export default Home;

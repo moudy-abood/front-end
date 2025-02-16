@@ -13,13 +13,17 @@ export const createAddress = (data) => {
         street: data.street,
         postalCode: data.postalCode,
       };
-
       await services.createAddressService(addressData);
-      return dispatch({
+      dispatch({
         type: actionTypes.CREATE_ADDRESS_SUCCESS,
       });
+      return { success: true };
     } catch (error) {
-      dispatch({ type: actionTypes.CREATE_ADDRESS_FAIL, error: error.message });
+      dispatch({
+        type: actionTypes.CREATE_ADDRESS_FAIL,
+        error: error?.response?.data?.validation?.body?.message,
+      });
+      return { success: false };
     }
   };
 };
@@ -30,7 +34,7 @@ export const fetchAddresses = () => {
       type: actionTypes.FETCH_ADDRESSES,
     });
     try {
-      const response = await services.listUserAddressesService();
+      const response = await services.listAddressesService();
       dispatch({
         type: actionTypes.FETCH_ADDRESSES_SUCCESS,
         payload: response,
@@ -38,27 +42,49 @@ export const fetchAddresses = () => {
     } catch (error) {
       dispatch({
         type: actionTypes.FETCH_ADDRESSES_FAIL,
+        error: error,
+      });
+    }
+  };
+};
+
+export const fetchAddress = (uuid) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.FETCH_ADDRESS,
+    });
+    try {
+      const response = await services.AddressService(uuid);
+      dispatch({
+        type: actionTypes.FETCH_ADDRESS_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.FETCH_ADDRESS_FAIL,
         error: error.message,
       });
     }
   };
 };
 
-export const updateAddress = (data) => {
+export const updateAddress = (data, addressUuid) => {
   return async (dispatch) => {
     dispatch({
       type: actionTypes.UPDATE_ADDRESS,
     });
     try {
-      await services.updateAddressService(data);
+      await services.updateAddressService(data, addressUuid);
       dispatch({
         type: actionTypes.UPDATE_ADDRESS_SUCCESS,
       });
+      return { success: true };
     } catch (error) {
       dispatch({
         type: actionTypes.UPDATE_ADDRESS_FAIL,
-        error: error.message,
+        error: error?.validation?.body?.message,
       });
+      return { success: false };
     }
   };
 };

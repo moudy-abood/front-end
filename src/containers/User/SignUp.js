@@ -1,8 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
 
-import { signUp, logout } from "../../store/Actions/User/Auth";
+import { signUp } from "../../store/Actions/Auth";
 import { createCart } from "../../store/Actions/Cart";
+import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function User() {
   const [data, setData] = useState({
@@ -10,9 +13,16 @@ function User() {
     password: "",
     name: "",
     phoneNumber: "",
+    reEnteredPassword: "",
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = checkToken();
+
+  const { error } = useSelector((state) => state.authReducer);
+
+  const errors = authErrorHandler(error, data);
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -24,11 +34,14 @@ function User() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await dispatch(signUp(data));
-    dispatch(createCart());
+    const result = await dispatch(signUp(data));
+    await dispatch(createCart());
+    if (result.success) {
+      navigate("/");
+    }
   };
 
-  return (
+  const signUpForm = (
     <div>
       <form onSubmit={submitHandler}>
         <div>
@@ -41,6 +54,7 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.email.typo || errors.email.alreadyUsed}</span>
         </div>
         <div>
           <label>
@@ -52,6 +66,19 @@ function User() {
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.password}</span>
+        </div>
+        <div>
+          <label>
+            Re-enter password
+            <input
+              type="password"
+              name="reEnteredPassword"
+              value={data.reEnteredPassword}
+              onChange={inputChangeHandler}
+            />
+          </label>
+          <span>{errors.reEnteredPassword}</span>
         </div>
         <div>
           <label>
@@ -59,10 +86,12 @@ function User() {
             <input
               type="text"
               name="name"
+              placeholder="First and last name"
               value={data.name}
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.name}</span>
         </div>
         <div>
           <label>
@@ -70,18 +99,25 @@ function User() {
             <input
               type="text"
               name="phoneNumber"
+              placeholder="Phone number"
               value={data.phoneNumber}
               onChange={inputChangeHandler}
             />
           </label>
+          <span>{errors.phoneNumber}</span>
         </div>
-        <button onSubmit={submitHandler} type="submit">
-          Submit
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
-      <button onClick={() => dispatch(logout())}>logout</button>
+      <div>
+        <p>already a customer?</p>
+        <Link to="/login">Login instead</Link>
+      </div>
     </div>
   );
+
+  const contentToRender = isLoggedIn ? AlreadyLoggedIn : signUpForm;
+
+  return contentToRender;
 }
 
 export default User;

@@ -1,94 +1,90 @@
-import * as actionTypes from "../ActionTypes/Products";
+import * as actionTypes from "../ActionTypes/User";
 
 const initialState = {
-  products: [],
-  product: {},
-  uuid: "",
-  totalCount:'',
+  name: "",
+  phoneNumber: "",
+  email: "",
   loading: false,
-  totalPages:'',
-  currentPage:'',
   error: null,
 };
 
-const productsReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.CREATE_PRODUCTS:
+    case actionTypes.FETCH_USER:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.CREATE_PRODUCTS_FAIL:
+    case actionTypes.FETCH_USER_FAIL:
       return {
         ...state,
         loading: false,
         error: action?.error,
       };
-    case actionTypes.CREATE_PRODUCTS_SUCCESS:
+    case actionTypes.FETCH_USER_SUCCESS:
       return {
         ...state,
-        products: action?.payload,
         loading: false,
         error: null,
+        uuid: action?.uuid,
+        name: action?.name,
+        phoneNumber: action?.phoneNumber,
+        email: action?.email,
       };
-    case actionTypes.FETCH_PRODUCTS:
+    case actionTypes.UPDATE_USER:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.FETCH_PRODUCTS_FAIL:
+    case actionTypes.UPDATE_USER_FAIL:
       return {
         ...state,
         loading: false,
         error: action?.error,
       };
-    case actionTypes.FETCH_PRODUCTS_SUCCESS:
+    case actionTypes.UPDATE_USER_SUCCESS:
       return {
         ...state,
-        products: action?.payload,
-        currentPage: action?.payload,
-        totalPages: action?.payload,
         loading: false,
         error: null,
+        name: action?.payload?.name,
+        phoneNumber: action?.payload?.phoneNumber,
       };
-    case actionTypes.UPDATE_PRODUCT:
+    case actionTypes.UPDATE_USER_CREDENTIALS:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.UPDATE_PRODUCT_FAIL:
+    case actionTypes.UPDATE_USER_CREDENTIALS_FAIL:
       return {
         ...state,
         loading: false,
         error: action?.error,
       };
-    case actionTypes.UPDATE_PRODUCT_SUCCESS:
+    case actionTypes.UPDATE_USER_CREDENTIALS_SUCCESS:
       return {
         ...state,
-        product: action?.payload,
-        currentPage: action?.payload,
         loading: false,
         error: null,
       };
-    case actionTypes.DELETE_PRODUCT:
+    case actionTypes.DELETE_USER:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case actionTypes.DELETE_PRODUCT_FAIL:
+    case actionTypes.DELETE_USER_FAIL:
       return {
         ...state,
         loading: false,
         error: action?.error,
       };
-    case actionTypes.DELETE_PRODUCT_SUCCESS:
+    case actionTypes.DELETE_USER_SUCCESS:
       return {
         ...state,
-        uuid: action?.payload,
         loading: false,
         error: null,
       };
@@ -98,4 +94,4 @@ const productsReducer = (state = initialState, action) => {
   }
 };
 
-export default productsReducer;
+export default profileReducer;
