@@ -4,11 +4,12 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { fetchAddress } from "../../store/Actions/Address";
 import { updateAddress } from "../../store/Actions/Address";
-import { addressErrorHandler } from "../../utils/helpers";
+import { addressErrorHandler, checkToken } from "../../utils/helpers";
 
 function EditAddress() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = checkToken();
 
   const [searchParams] = useSearchParams();
   const addressUuid = searchParams.get("edit");
@@ -23,8 +24,9 @@ function EditAddress() {
   });
 
   useEffect(() => {
+    if (!token) navigate("/login");
     dispatch(fetchAddress(addressUuid));
-  }, [dispatch, addressUuid]);
+  }, [dispatch, addressUuid, navigate, token]);
 
   useEffect(() => {
     if (address) {

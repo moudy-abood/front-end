@@ -12,12 +12,13 @@ export const getUserService = async () => {
 export const updateUserService = async (data) => {
   try {
     const user = await API.put("/user", {
+      email:data.email,
       name: data.name,
       phoneNumber: data.phoneNumber,
     });
     return user;
   } catch (error) {
-    throw error.response?.data;
+    throw  error.response?.data?.validation?.body?.message
   }
 };
 

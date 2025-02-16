@@ -43,8 +43,7 @@ export const updateAddressService = async (data, uuid) => {
 
 export const deleteAddressService = async (uuid) => {
   try {
-    const address = await API.delete(`/address/${uuid}`);
-    return address;
+    await API.delete(`/address/${uuid}`);
   } catch (error) {
     throw error.response.data;
   }

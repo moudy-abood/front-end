@@ -36,7 +36,7 @@ export const updateUser = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.UPDATE_USER_FAIL,
-        error: error?.validation?.body?.message,
+        error: error,
       });
       return { success: false };
     }

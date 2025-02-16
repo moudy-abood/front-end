@@ -99,13 +99,15 @@ export const deleteAddress = (uuid) => {
       dispatch({
         type: actionTypes.DELETE_ADDRESS_SUCCESS,
       });
+      return { success: true}
     } catch (error) {
       dispatch(
         {
           type: actionTypes.DELETE_ADDRESS_FAIL,
           error: error.message,
-        } || "Address not found"
+        }
       );
+      return { success: false}
     }
   };
 };

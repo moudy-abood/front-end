@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { authErrorHandler, checkToken } from "../../utils/helpers";
 import { fetchUser, updateUserCredentials } from "../../store/Actions/User";
@@ -9,10 +9,9 @@ function EditCredentials() {
   const dispatch = useDispatch();
   const token = checkToken();
   const navigate = useNavigate();
-  const { error, email } = useSelector((state) => state.profileReducer);
+  const { error } = useSelector((state) => state.profileReducer);
 
   const [data, setData] = useState({
-    email: "",
     oldPassword: "",
     newPassword: "",
     reEnteredPassword: "",
@@ -24,15 +23,6 @@ function EditCredentials() {
     if (!token) navigate("/login");
     dispatch(fetchUser());
   }, [dispatch, navigate, token]);
-
-  useEffect(() => {
-    if (email) {
-      setData((prevData) => ({
-        ...prevData,
-        email,
-      }));
-    }
-  }, [email]);
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
@@ -57,18 +47,6 @@ function EditCredentials() {
   return (
     <div>
       <form onSubmit={handleSaveClick}>
-        <div>
-          <label>
-            Email
-            <input
-              type="text"
-              name="email"
-              value={data?.email}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.email.typo || errors.email.alreadyUsed}</span>
-        </div>
         <div>
           <label>
             Old password
@@ -110,9 +88,6 @@ function EditCredentials() {
         <button type="submit">Save</button>
       </form>
       <button onClick={handleCancelClick}>Cancel</button>
-      <div>
-        <Link to="/profile-credentials">change email or password</Link>
-      </div>
     </div>
   );
 }

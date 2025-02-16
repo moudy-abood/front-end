@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../store/Actions/Auth";
-import AlreadyLoggedIn from "../../components/AlreadyLoggedIn";
 import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function Login() {
@@ -12,12 +11,17 @@ function Login() {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const token = checkToken();
+
+  useEffect(() => {
+    if (!token) navigate("/login");
+  },[token, navigate])
 
   const { error, failedLogin } = useSelector((state) => state.authReducer);
 
   const errors = authErrorHandler(error, failedLogin);
-  const navigate = useNavigate();
-  const isLoggedIn = checkToken();
+
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -73,9 +77,8 @@ function Login() {
     </div>
   );
 
-  const contentToRender = isLoggedIn ? AlreadyLoggedIn : loginForm;
 
-  return contentToRender;
+  return loginForm;
 }
 
 export default Login;
