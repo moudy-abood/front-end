@@ -6,7 +6,6 @@ import profileReducer from "./Reducer/User";
 import addressReducer from "./Reducer/Address";
 import productsReducer from "./Reducer/Product";
 import cartReducer from "./Reducer/Cart";
-import itemsReducer from "./Reducer/Item";
 import orderReducer from "./Reducer/Order";
 
 export const store = configureStore({
@@ -16,7 +15,6 @@ export const store = configureStore({
     addressReducer,
     productsReducer,
     cartReducer,
-    itemsReducer,
     orderReducer,
   },
   middleware: [thunk],

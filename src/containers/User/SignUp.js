@@ -21,8 +21,7 @@ function User() {
 
   useEffect(() => {
     if (token) navigate("/");
-  },[token, navigate])
-
+  }, [token, navigate]);
 
   const { error } = useSelector((state) => state.authReducer);
 
@@ -39,8 +38,8 @@ function User() {
   const submitHandler = async (e) => {
     e.preventDefault();
     const result = await dispatch(signUp(data));
-    await dispatch(createCart());
     if (result.success) {
+      await dispatch(createCart());
       navigate("/");
     }
   };
@@ -118,7 +117,6 @@ function User() {
       </div>
     </div>
   );
-
 
   return signUpForm;
 }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../store/Actions/Auth";
+import { createCart } from "../../store/Actions/Cart";
 import { authErrorHandler, checkToken } from "../../utils/helpers";
 
 function Login() {
@@ -16,12 +17,11 @@ function Login() {
 
   useEffect(() => {
     if (!token) navigate("/login");
-  },[token, navigate])
+  }, [token, navigate]);
 
   const { error, failedLogin } = useSelector((state) => state.authReducer);
 
   const errors = authErrorHandler(error, failedLogin);
-
 
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -35,6 +35,7 @@ function Login() {
     e.preventDefault();
     const result = await dispatch(login(data));
     if (result.success) {
+      await dispatch(createCart());
       navigate("/");
     }
   };
@@ -76,7 +77,6 @@ function Login() {
       </div>
     </div>
   );
-
 
   return loginForm;
 }

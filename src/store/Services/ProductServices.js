@@ -20,10 +20,19 @@ export const getProductsService = async (page) => {
   }
 };
 
+export const getProductService = async (uuid) => {
+  try {
+    const product = await API.get(`/product/${uuid}`)
+    return product.data
+  } catch (error) {
+    throw error.response.data
+  }
+}
+
 export const getAllProductsService = async ({ search, page }) => {
   const filters = search
     ? filtersHelper("like", "title", `%${search}%`, page)
-    : null;
+    : filtersHelper("like", "title", `%%`, page);
   try {
     const products = await API.get("/product/", { params: filters });
     return products.data;

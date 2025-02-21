@@ -81,6 +81,26 @@ export const getCategoryProducts = (options) => {
   };
 };
 
+export const fetchProduct = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.FETCH_PRODUCT
+    });
+    try {
+      const response = await services.getProductService(data)
+      dispatch({
+        type: actionTypes.FETCH_PRODUCT_SUCCESS,
+        payload: response,
+      })
+    } catch (error) {
+      dispatch({
+        type: actionTypes.FETCH_PRODUCT_FAIL,
+        error: error.message,
+      });
+    }
+  }
+}
+
 export const updateProduct = (data) => {
   return async (dispatch) => {
     dispatch({

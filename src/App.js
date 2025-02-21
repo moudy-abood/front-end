@@ -7,7 +7,8 @@ import CreateAddress from "./containers/Address/CreateAddress";
 import Profile from "./containers/User/Profile";
 import Addresses from "./containers/Address/AddressList";
 import EditAddress from "./containers/Address/EditAddress";
-import CreateProduct from "./containers/Products/Product";
+import CreateProduct from "./containers/Products/CreateProduct";
+import Product from "./containers/Products/Product";
 import Cart from "./containers/Cart";
 import Order from "./containers/Order";
 import Category from "./containers/Products/Category";
@@ -22,13 +23,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>} />
+        <Route path="/product" element={<Product/>} />
         <Route path="/address" element={<Addresses/>} />
         <Route path="/edit-address" element={<EditAddress/>} />
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/profile-credentials" element={<EditCredentials/>} />
-        <Route path="/Cart" element={<Cart/>} />
+        <Route path="/cart" element={<Cart/>} />
         <Route path="/create-address" element={<CreateAddress/>} />
         <Route path="/create-product" element={<CreateProduct/>} />
         <Route path="/orders" element={<Order/>} />

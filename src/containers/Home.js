@@ -23,6 +23,7 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchAllProducts(options));
+    window.scrollTo({top: 0, behavior: 'smooth'})
   }, [dispatch, options]);
 
   return (
