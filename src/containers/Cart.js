@@ -8,7 +8,7 @@ import { updateItem, deleteItem } from "../store/Actions/Cart";
 import { createOrder } from "../store/Actions/Order";
 import { checkToken } from "../utils/helpers";
 
-function CartCopy() {
+function Cart() {
   const dispatch = useDispatch();
   const token = checkToken();
   const navigate = useNavigate();
@@ -34,8 +34,8 @@ function CartCopy() {
       const newQuantity = item.quantity - 1;
       dispatch(updateItem(item.uuid, newQuantity, cartUuid));
     } else {
-      await dispatch(deleteItem(item.uuid, cartUuid));
-      await dispatch(fetchCart());
+      dispatch(deleteItem(item.uuid, cartUuid));
+      dispatch(fetchCart());
     }
   };
 
@@ -82,4 +82,4 @@ function CartCopy() {
   return contentToRender;
 }
 
-export default CartCopy;
+export default Cart;

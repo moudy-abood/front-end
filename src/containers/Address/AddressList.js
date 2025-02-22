@@ -41,7 +41,7 @@ function AddressList() {
         <p>{address.city}</p>
         <p>{address.street}</p>
         <p>{address.postalCode}</p>
-        <Link to={`/edit-address?edit=${address.uuid}`}>edit</Link>
+        <Link to={`/edit-address/${address.uuid}`}>edit</Link>
         <button 
         onClick={() => selectedUuidHandler(address.uuid)}
         >Remove</button>

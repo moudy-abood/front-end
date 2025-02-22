@@ -29,7 +29,7 @@ function ProductList() {
     };
 
   const productClickHandler = (uuid) => {
-    navigate(`/product?product=${uuid}`)
+    navigate(`/product/${uuid}`)
   }
 
   const productsData = allProducts?.products?.map((product) => {

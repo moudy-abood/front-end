@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { fetchAddress } from "../../store/Actions/Address";
 import { updateAddress } from "../../store/Actions/Address";
@@ -11,8 +11,7 @@ function EditAddress() {
   const navigate = useNavigate();
   const token = checkToken();
 
-  const [searchParams] = useSearchParams();
-  const addressUuid = searchParams.get("edit");
+  const {uuid} = useParams();
   const { error, address } = useSelector((state) => state.addressReducer);
   const errors = addressErrorHandler(error);
 
@@ -25,8 +24,8 @@ function EditAddress() {
 
   useEffect(() => {
     if (!token) navigate("/login");
-    dispatch(fetchAddress(addressUuid));
-  }, [dispatch, addressUuid, navigate, token]);
+    dispatch(fetchAddress(uuid));
+  }, [dispatch, uuid, navigate, token]);
 
   useEffect(() => {
     if (address) {
@@ -50,7 +49,7 @@ function EditAddress() {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-    const result = await dispatch(updateAddress(data, addressUuid));
+    const result = await dispatch(updateAddress(data, uuid));
     if (result.success) {
       navigate("/address");
     }

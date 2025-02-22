@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchProduct } from "../../store/Actions/Product";
@@ -8,13 +8,12 @@ import { fetchCart, createItems } from "../../store/Actions/Cart";
 function Product() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const productUuid = searchParams.get("product");
+  const {uuid} = useParams();
 
   useEffect(() => {
-    dispatch(fetchProduct(productUuid));
+    dispatch(fetchProduct(uuid));
     dispatch(fetchCart());
-  }, [dispatch, productUuid]);
+  }, [dispatch, uuid]);
 
   const { product } = useSelector((state) => state.productsReducer);
   const { cartUuid } = useSelector((state) => state.cartReducer);
