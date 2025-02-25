@@ -49,6 +49,7 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: null,
+        email:action?.payload?.email,
         name: action?.payload?.name,
         phoneNumber: action?.payload?.phoneNumber,
       };

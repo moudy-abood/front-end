@@ -50,6 +50,65 @@ const cartReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
+    case actionTypes.CREATE_ITEM:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.CREATE_ITEM_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.CREATE_ITEM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+    case actionTypes.UPDATE_ITEM:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.UPDATE_ITEM_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.UPDATE_ITEM_SUCCESS:      
+      return {
+        ...state,
+        items: state?.items?.map((item) =>
+          item?.uuid === action?.itemUuid
+            ? { ...item, quantity: action?.newQuantity }
+            : item
+        ),
+        loading: false,
+        error: null,
+      };
+    case actionTypes.DELETE_ITEM:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.DELETE_ITEM_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.DELETE_ITEM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
     default:
       return state;
   }

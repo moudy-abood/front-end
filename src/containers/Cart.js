@@ -1,74 +1,85 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 import { fetchCart } from "../store/Actions/Cart";
 import { fetchAddresses } from "../store/Actions/Address";
-import { updateItem, deleteItem } from "../store/Actions/Items";
+import { updateItem, deleteItem } from "../store/Actions/Cart";
 import { createOrder } from "../store/Actions/Order";
+import { checkToken } from "../utils/helpers";
 
 function Cart() {
   const dispatch = useDispatch();
+  const token = checkToken();
+  const navigate = useNavigate();
+  const { items, cartUuid } = useSelector((state) => state.cartReducer);
+
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token, navigate]);
+
+  const { addresses } = useSelector((state) => state.addressReducer);
   useEffect(() => {
     dispatch(fetchCart());
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  const { status, items, cartUuid } = useSelector((state) => state.cartReducer);
-  const { addresses } = useSelector(state => state.addressReducer);
-  const [, setQuantity] = useState(0);
-
-  const addClickHandler = (item) => {
-    item.quantity = item.quantity + 1;
-    setQuantity(item.quantity);
-    dispatch(updateItem(item));
+  const addClickHandler = async (item) => {
+    const newQuantity = item.quantity + 1;
+    await dispatch(updateItem(item.uuid, newQuantity, cartUuid));
   };
 
-  const subtractClickHandler = (item) => {
+  const subtractClickHandler = async (item) => {
     if (item.quantity > 1) {
-      item.quantity = item.quantity - 1;
-      setQuantity(item.quantity);
-      dispatch(updateItem(item, cartUuid));
+      const newQuantity = item.quantity - 1;
+      dispatch(updateItem(item.uuid, newQuantity, cartUuid));
     } else {
       dispatch(deleteItem(item.uuid, cartUuid));
+      dispatch(fetchCart());
     }
   };
 
-  const orderClickHandler = () => {
-    dispatch(createOrder({
-      cartUuid,
-      addressUuid: addresses[0].uuid,
-      total: totalPrice,
-      
-    }))
-  }
+  const totalPrice = items
+    ?.map((item) => {
+      return item.Product.price;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
 
+    const totalItems = items.map((item) => {
+      return item.quantity
+    }).reduce((acc,curr) => acc+curr,0)
 
-  let totalPrice = 0;
-  if(items.length) {
-    items.map(item => {
-      return  totalPrice = totalPrice + item.Product.price
-    })  
-  }
+  const cart = items?.map((item) => {
+    return (
+      <div key={item.uuid}>
+        <p>{item.Product.title}</p>
+        <p>{item.Product.category}</p>
+        <p>{item.Product.description}</p>
+        <p>{item.Product.price}</p>
+        <p>{item.quantity}</p>
+        <button onClick={() => subtractClickHandler(item)}>-</button>
+        <button onClick={() => addClickHandler(item)}>+</button>
+      </div>
+    );
+  });
 
-  let itemsData = items.map((item) => (
-    <div key={item?.uuid}>
-      <p>category: {item?.Product.category}</p>
-      <p>description: {item?.Product.description}</p>
-      <p>title: {item?.Product.title}</p>
-      <p>price: {item?.Product.price}</p>
-      <p>quantity: {item?.quantity}</p>
-      <button onClick={() => addClickHandler(item)}>+</button>
-      <button onClick={() => subtractClickHandler(item)}>-</button>
-    </div>
-  ));
-
-  return (
+  const noItems = (
     <div>
-      <p>{status}</p>
-      {itemsData}
-      <button onClick={orderClickHandler}>Check Out</button>
+      <p>Your cart is empty</p>
+      <Link to="/">Add items</Link>
     </div>
   );
+
+  const contentToRender = items?.length ? (
+    <div>
+      {cart} 
+      <p>Subtotal ({totalItems} items) : ${totalPrice}</p>
+    </div>
+  ) : (
+    noItems
+  );
+
+  return contentToRender;
 }
 
 export default Cart;

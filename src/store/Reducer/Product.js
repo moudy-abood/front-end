@@ -49,8 +49,6 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         products: action?.payload,
-        currentPage: action?.payload,
-        totalPages: action?.payload,
         loading: false,
         error: null,
       };
@@ -70,6 +68,25 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         allProducts: action?.payload,
+        loading: false,
+        error: null,
+      };
+    case actionTypes.FETCH_PRODUCT:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.FETCH_PRODUCT_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.FETCH_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        product: action?.payload,
         loading: false,
         error: null,
       };

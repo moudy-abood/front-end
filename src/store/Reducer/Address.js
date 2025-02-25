@@ -79,10 +79,6 @@ const addressReducer = (state = initialState, action) => {
       };
     case actionTypes.UPDATE_ADDRESS_SUCCESS:
       return {
-        country: action?.country,
-        city: action?.country,
-        street: action?.street,
-        postalCode: action?.postalCode,
         error: null,
         loading: false,
       };
@@ -101,7 +97,6 @@ const addressReducer = (state = initialState, action) => {
     case actionTypes.DELETE_ADDRESS_SUCCESS:
       return {
         ...state,
-        uuid: action?.payload,
         loading: false,
         error: null,
       };

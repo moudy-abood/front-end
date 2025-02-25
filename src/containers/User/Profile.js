@@ -35,9 +35,9 @@ function Profile() {
       phoneNumber,
     });
   };
-  const handleSaveClick = (e) => {
+  const handleSaveClick = async (e) => {
     e.preventDefault();
-    const result = dispatch(updateUser(data));
+    const result = await dispatch(updateUser(data));
     if (result.success) {
       setIsEditing(false);
     }
