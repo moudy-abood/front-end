@@ -6,7 +6,6 @@ import EditCredentials from "./containers/User/EditCredentials";
 import CreateAddress from "./containers/Address/CreateAddress";
 import Profile from "./containers/User/Profile";
 import Addresses from "./containers/Address/AddressList";
-import EditAddress from "./containers/Address/EditAddress";
 import CreateProduct from "./containers/Products/CreateProduct";
 import Product from "./containers/Products/Product";
 import Cart from "./containers/Cart";
@@ -25,7 +24,6 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/product/:uuid" element={<Product/>} />
         <Route path="/address" element={<Addresses/>} />
-        <Route path="/edit-address/:uuid" element={<EditAddress/>} />
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/profile" element={<Profile/>} />
@@ -33,7 +31,7 @@ function App() {
         <Route path="/cart" element={<Cart/>} />
         <Route path="/create-address" element={<CreateAddress/>} />
         <Route path="/create-product" element={<CreateProduct/>} />
-        <Route path="/orders" element={<Order/>} />
+        <Route path="/order" element={<Order/>} />
         <Route path="/categories" element={<Category/>} />
       </Routes>
     </BrowserRouter>
