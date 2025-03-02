@@ -4,16 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchProduct } from "../../store/Actions/Product";
 import { fetchCart, createItems } from "../../store/Actions/Cart";
+import { checkToken } from "../../utils/helpers";
 
 function Product() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {uuid} = useParams();
+  const token = checkToken();
+  const { uuid } = useParams();
 
   useEffect(() => {
     dispatch(fetchProduct(uuid));
-    dispatch(fetchCart());
-  }, [dispatch, uuid]);
+    if (token) dispatch(fetchCart());
+  }, [dispatch, uuid, token]);
 
   const { product } = useSelector((state) => state.productsReducer);
   const { cartUuid } = useSelector((state) => state.cartReducer);

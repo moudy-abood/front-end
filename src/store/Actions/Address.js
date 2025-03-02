@@ -21,7 +21,7 @@ export const createAddress = (data) => {
     } catch (error) {
       dispatch({
         type: actionTypes.CREATE_ADDRESS_FAIL,
-        error: error?.response?.data?.validation?.body?.message,
+        error: error?.validation?.body?.message,
       });
       return { success: false };
     }

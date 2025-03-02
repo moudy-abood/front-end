@@ -16,14 +16,17 @@ function Home() {
   const isLoggedIn = checkToken();
 
   const loginStatus = isLoggedIn ? (
-    <Link to="/profile">Profile</Link>
+    <div>
+      <div><Link to="/profile">Profile</Link></div>
+      <div><Link to="/cart">🛒</Link></div>
+    </div>
   ) : (
     <Link to="/sign-up">Sign Up</Link>
   );
 
   useEffect(() => {
     dispatch(fetchAllProducts(options));
-    window.scrollTo({top: 0, behavior: 'smooth'})
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [dispatch, options]);
 
   return (

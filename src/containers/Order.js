@@ -1,47 +1,207 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import { fetchOrders, updateOrder, deleteOrder } from "../store/Actions/Order";
+import { fetchAddresses } from "../store/Actions/Address";
+import { fetchCart } from "../store/Actions/Cart";
+import { checkToken, addressErrorHandler } from "../utils/helpers";
+import { createOrder } from "../store/Actions/Order";
+import { createCart } from "../store/Actions/Cart";
+import { createAddress } from "../store/Actions/Address";
 
-function Orders() {
+function Order() {
   const dispatch = useDispatch();
+  const token = checkToken();
+  const navigate = useNavigate();
+
+  const { addresses } = useSelector((state) => state.addressReducer);
+  const { items } = useSelector((state) => state.cartReducer);
+  const { error } = useSelector((state) => state.addressReducer);
+  const errors = addressErrorHandler(error);
+
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [showTempForm, setShowTempForm] = useState(false);
+  const [isOrderSuccess, setIsOrderSuccess] = useState(false);
+  const [tempAddress, setTempAddress] = useState({
+    country: "",
+    city: "",
+    street: "",
+    postalCode: "",
+  });
 
   useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    dispatch(fetchAddresses());
+    dispatch(fetchCart());
+  }, [dispatch, navigate, token]);
 
-  const { orders } = useSelector((state) => state.orderReducer);
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate("/cart");
+    }
+  }, [navigate, items]);
 
-  const dispatchClickHandler = (uuid, dispatched) => {
-    dispatch(updateOrder(uuid, dispatched))
-  }
-  
-  const deliveredClickHandler = (uuid, delivered) => {
-    dispatch(updateOrder(uuid, delivered))
-  }
+  const handleAddressSelect = (uuid) => {
+    setSelectedAddress((prev) => (prev === uuid ? null : uuid));
+  };
 
-  const deleteOrderHandler = (uuid) =>{
-    dispatch(deleteOrder(uuid));
-  }
+  const handleTempAddressChange = (e) => {
+    setTempAddress({ ...tempAddress, [e.target.name]: e.target.value });
+    setSelectedAddress(tempAddress);
+  };
 
+  const totalPrice = items
+    ?.map((item) => {
+      return item.Product.price * item.quantity;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
 
-  let ordersList = "";
-  if (orders.length) {
-    ordersList = orders.map((order) => {
-      return (
-        <div key={order.uuid}>
-          <p>country: {order.Address.country}</p>
-          <p>city: {order.Address.city}</p>
-          <p>street: {order.Address.street}</p>
-          <p>postalCode: {order.Address.postalCode}</p>
-          <button onClick={() => dispatchClickHandler(order.uuid,'DISPATCHED')}>Dispatch</button>
-          <button onClick={() => deliveredClickHandler(order.uuid,'DELIVERED')}>Delivered</button>
-          <button onClick={() => deleteOrderHandler(order.uuid)}>Delete</button>
+  const addressList = addresses?.map((address) => {
+    return (
+      <div key={address.uuid}>
+        <label>
+          <input
+            type="checkbox"
+            checked={selectedAddress === address.uuid}
+            onChange={() => handleAddressSelect(address.uuid)}
+          />
+          <p>{address.country}</p>
+          <p>{address.city}</p>
+          <p>{address.street}</p>
+          <p>{address.postalCode}</p>
+        </label>
+      </div>
+    );
+  });
+
+  const orderHandler = async (selectedAddress, totalPrice) => {
+    const result = await dispatch(
+      createOrder({
+        ...(typeof selectedAddress === "string"
+          ? { addressUuid: selectedAddress }
+          : { temporaryAddress: selectedAddress }),
+        total: totalPrice,
+      })
+    );
+    if (result.success) {
+      await dispatch(createCart());
+      setIsOrderSuccess(true);
+    }
+  };
+
+  const handleTempAddressSubmit = async (e) => {
+    e.preventDefault();
+    const result = await dispatch(createAddress(tempAddress));
+    if (result.success) {
+      setShowTempForm(false);
+      await dispatch(fetchAddresses());
+    }
+  };
+
+  const tempAddressForm = (
+    <div>
+      <form onSubmit={handleTempAddressSubmit}>
+        <div>
+          <label>
+            Country
+            <input
+              type="text"
+              name="country"
+              value={tempAddress.country}
+              onChange={handleTempAddressChange}
+            />
+          </label>
+          <span>{errors.country}</span>
         </div>
-      );
-    });
-  }
-  return  ordersList ;
+        <div>
+          <label>
+            City
+            <input
+              type="text"
+              name="city"
+              value={tempAddress.city}
+              onChange={handleTempAddressChange}
+            />
+          </label>
+          <span>{errors.city}</span>
+        </div>
+        <div>
+          <label>
+            Street
+            <input
+              type="text"
+              name="street"
+              value={tempAddress.street}
+              onChange={handleTempAddressChange}
+            />
+          </label>
+          <span>{errors.street}</span>
+        </div>
+        <div>
+          <label>
+            Postal Code
+            <input
+              type="text"
+              name="postalCode"
+              value={tempAddress.postalCode}
+              onChange={handleTempAddressChange}
+            />
+          </label>
+          <span>{errors.postalCode}</span>
+        </div>
+        <button onSubmit={handleTempAddressSubmit} type="submit">
+          Add this address to your list of addresses
+        </button>
+      </form>
+      <p>Total : ${totalPrice}</p>
+      <button onClick={() => orderHandler(selectedAddress, totalPrice)}>
+        Order using this temporary address
+      </button>
+      <button onClick={() => setShowTempForm(!showTempForm)}>
+        {showTempForm ? "Cancel temporary address" : "Use temporary address"}
+      </button>
+    </div>
+  );
+
+  const contentToRender = (
+    <div>
+      {showTempForm ? (
+        tempAddressForm
+      ) : (
+        <div>
+          {addressList}
+          <p>Total : ${totalPrice}</p>
+          <button onClick={() => setShowTempForm(!showTempForm)}>
+            {showTempForm
+              ? "Cancel temporary address form"
+              : "Add a temporary address"}
+          </button>
+          <button onClick={() => orderHandler(selectedAddress, totalPrice)}>
+            Order now
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  const successMessageHandler = () => {
+    setIsOrderSuccess(false);
+    navigate("/");
+  };
+
+  const orderSuccessMessage = (
+    <div>
+      <h2>Order Confirmed!</h2>
+      <p>Your order has been placed successfully</p>
+      <button onClick={successMessageHandler}>Okay</button>
+    </div>
+  );
+
+  return <div>{isOrderSuccess ? orderSuccessMessage : contentToRender}</div>;
 }
 
-export default Orders;
+export default Order;

@@ -10,6 +10,7 @@ import CreateProduct from "./containers/Products/CreateProduct";
 import Product from "./containers/Products/Product";
 import Cart from "./containers/Cart";
 import Order from "./containers/Order";
+import MyOrders from "./containers/MyOrders";
 import Category from "./containers/Products/Category";
 import Layout from "./navigation/Routes";
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/create-address" element={<CreateAddress/>} />
         <Route path="/create-product" element={<CreateProduct/>} />
         <Route path="/order" element={<Order/>} />
+        <Route path="/orders" element={<MyOrders/>} />
         <Route path="/categories" element={<Category/>} />
       </Routes>
     </BrowserRouter>
