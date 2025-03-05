@@ -65,6 +65,7 @@ function Profile() {
       </div>
       <div>
         <Link to="/address">Manage addresses</Link>
+        <Link to="/orders">My orders</Link>
       </div>
     </div>
   );

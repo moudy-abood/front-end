@@ -5,7 +5,7 @@ export const createOrderService = async (data) => {
     const order = await API.post("/order", data);
     return order;
   } catch (error) {
-    return Promise.reject(error);
+    throw error.response.data.validation;
   }
 };
 
@@ -14,7 +14,7 @@ export const getOrdersService = async () => {
     const orders = await API.get("/order");
     return orders.data;
   } catch (error) {
-    return Promise.reject(error);
+    throw error.response.data;
   }
 };
 
@@ -23,7 +23,7 @@ export const updateOrderService = async (uuid, updateField) => {
     const order = await API.put(`/order/${uuid}/${updateField}`);
     return order;
   } catch (error) {
-    return Promise.reject(error);
+    throw error.response.data;
   }
 };
 
@@ -32,6 +32,6 @@ export const deleteOrderService = async (uuid) => {
     const order = await API.delete(`/order/${uuid}`);
     return order;
   } catch (error) {
-    return Promise.reject(error);
+    throw error.response.data;
   }
 };

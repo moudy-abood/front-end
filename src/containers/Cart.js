@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { fetchCart } from "../store/Actions/Cart";
-import { fetchAddresses } from "../store/Actions/Address";
 import { updateItem, deleteItem } from "../store/Actions/Cart";
-import { createOrder } from "../store/Actions/Order";
 import { checkToken } from "../utils/helpers";
 
 function Cart() {
@@ -15,13 +13,11 @@ function Cart() {
   const { items, cartUuid } = useSelector((state) => state.cartReducer);
 
   useEffect(() => {
-    if (!token) navigate("/");
+    if (!token) navigate("/login");
   }, [token, navigate]);
 
-  const { addresses } = useSelector((state) => state.addressReducer);
   useEffect(() => {
     dispatch(fetchCart());
-    dispatch(fetchAddresses());
   }, [dispatch]);
 
   const addClickHandler = async (item) => {
@@ -34,20 +30,22 @@ function Cart() {
       const newQuantity = item.quantity - 1;
       dispatch(updateItem(item.uuid, newQuantity, cartUuid));
     } else {
-      dispatch(deleteItem(item.uuid, cartUuid));
-      dispatch(fetchCart());
+      await dispatch(deleteItem(item.uuid, cartUuid));
+      await dispatch(fetchCart());
     }
   };
 
   const totalPrice = items
     ?.map((item) => {
-      return item.Product.price;
+      return item.Product.price * item.quantity;
     })
     .reduce((acc, curr) => acc + curr, 0);
 
-    const totalItems = items.map((item) => {
-      return item.quantity
-    }).reduce((acc,curr) => acc+curr,0)
+  const totalItems = items
+    .map((item) => {
+      return item.quantity;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
 
   const cart = items?.map((item) => {
     return (
@@ -63,6 +61,10 @@ function Cart() {
     );
   });
 
+  const orderNavigationHandler = () => {
+    navigate(`/order`);
+  };
+
   const noItems = (
     <div>
       <p>Your cart is empty</p>
@@ -72,8 +74,13 @@ function Cart() {
 
   const contentToRender = items?.length ? (
     <div>
-      {cart} 
-      <p>Subtotal ({totalItems} items) : ${totalPrice}</p>
+      {cart}
+      <p>
+        Subtotal ({totalItems} items) : ${totalPrice}
+      </p>
+      <button onClick={() => orderNavigationHandler()}>
+        Proceed to checkout
+      </button>
     </div>
   ) : (
     noItems

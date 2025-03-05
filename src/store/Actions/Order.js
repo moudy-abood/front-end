@@ -11,11 +11,13 @@ export const createOrder = (data) => {
       dispatch({
         type: actionTypes.CREATE_ORDER_SUCCESS,
       });
+      return { success: true }
     } catch (error) {
       dispatch({
         type: actionTypes.CREATE_ORDER_FAIL,
         error: error.message,
       });
+      return { success: false }
     }
   };
 };

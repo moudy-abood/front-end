@@ -1,10 +1,6 @@
 import * as actionTypes from "../ActionTypes/Order";
 
 const initialState = {
-  cartUuid: "",
-  address: {},
-  temporaryAddress: {},
-  total: 0,
   orders: [],
   order: {},
   loading: false,
@@ -28,10 +24,6 @@ const orderReducer = (state = initialState, action) => {
     case actionTypes.CREATE_ORDER_SUCCESS:
       return {
         ...state,
-        cartUuid: action?.payload,
-        address: action?.payload,
-        temporaryAddress: action?.payload,
-        total: action?.payload,
         loading: false,
         error: null,
       };
