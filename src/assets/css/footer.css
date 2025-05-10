@@ -1,0 +1,138 @@
+.footer-flex {
+  display: flex;
+  justify-content: space-around;
+  background-color: #101820;
+  flex-wrap: wrap;
+  gap: 2rem;
+  height: auto;
+  margin: 0;
+  padding: 1rem 1rem;
+}
+
+.footer-flex > *:nth-child(1) {
+  margin-right: 0rem;
+}
+
+.footer-flex h3 {
+  border-bottom: 2px solid #f4f3f3;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.facebook-icon,
+.instagram-icon,
+.youtube-icon {
+  width: 22px;
+  height: auto;
+  filter: invert(100%);
+}
+
+.facebook-icon:hover,
+.instagram-icon:hover,
+.youtube-icon:hover {
+  transform: scale(1.1);
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.contact-us,
+.connect-with-us,
+.quick-links {
+  color: #f4f3f3;
+  margin: 0;
+  text-decoration: none;
+}
+
+.contact-us h3,
+.connect-with-us h3,
+.quick-links h3 {
+  margin: 2px;
+}
+
+.logo-icon-2 {
+  background-color: transparent;
+  display: flex;
+  width: 85px;
+  height: auto;
+  position: relative;
+  padding-left: 0;
+  top: 42px;
+}
+
+.quick-links ul {
+  list-style: none;
+  padding-left: 14px;
+}
+
+.quick-links li {
+  margin: 0.25rem 0;
+}
+
+.quick-links a {
+  color: #f4f3f3;
+  text-decoration: none;
+}
+
+.quick-links a:hover {
+  color: #bbb;
+}
+
+.terms-privacy {
+  background-color: #101820;
+  display: flex;
+  justify-content: center;
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.terms-privacy p {
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
+.terms-privacy a {
+  margin: 0 0.25rem;
+  text-decoration: none;
+}
+
+.terms-privacy a:hover {
+  color: #333;
+}
+
+.help-support h3 {
+  margin: 2px;
+  color: #f4f3f3;
+}
+
+.help-support ul {
+  list-style: none;
+  padding-left: 14px;
+}
+
+.help-support li {
+  margin: 0.25rem 0;
+}
+
+.help-support a {
+  color: #f4f3f3;
+  text-decoration: none;
+}
+
+.help-support a:hover {
+  color: #bbb;
+}
+
+.footer-flex > div {
+  padding: 0 1rem;
+  border-left: 1px dotted #555;
+}
+
+.footer-flex > div:first-child {
+  border-left: none;
+}

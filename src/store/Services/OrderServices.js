@@ -5,7 +5,7 @@ export const createOrderService = async (data) => {
     const order = await API.post("/order", data);
     return order;
   } catch (error) {
-    throw error.response.data.validation;
+    throw error.response.data;
   }
 };
 
@@ -13,6 +13,15 @@ export const getOrdersService = async () => {
   try {
     const orders = await API.get("/order");
     return orders.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getOrderService = async (uuid) => {
+  try {
+    const order = await API.get(`order/${uuid}`);
+    return order.data;
   } catch (error) {
     throw error.response.data;
   }

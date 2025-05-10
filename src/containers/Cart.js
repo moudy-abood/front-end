@@ -6,6 +6,10 @@ import { fetchCart } from "../store/Actions/Cart";
 import { updateItem, deleteItem } from "../store/Actions/Cart";
 import { checkToken } from "../utils/helpers";
 
+import "../assets/css/cart.css";
+import samsungPhoto from "../assets/images/samsung.jpg";
+import emptyCart from "../assets/images/empty-cart.png";
+
 function Cart() {
   const dispatch = useDispatch();
   const token = checkToken();
@@ -47,43 +51,63 @@ function Cart() {
     })
     .reduce((acc, curr) => acc + curr, 0);
 
-  const cart = items?.map((item) => {
-    return (
-      <div key={item.uuid}>
-        <p>{item.Product.title}</p>
-        <p>{item.Product.category}</p>
-        <p>{item.Product.description}</p>
-        <p>{item.Product.price}</p>
-        <p>{item.quantity}</p>
-        <button onClick={() => subtractClickHandler(item)}>-</button>
-        <button onClick={() => addClickHandler(item)}>+</button>
+  const cart = (
+    <div>
+      <h2 className="title">Shopping Cart</h2>
+      <div className="grid-cart">
+        {items?.map((item) => (
+          <div className="cart-card" key={item.uuid}>
+            <img className="samsung" src={samsungPhoto} alt="samsung" />
+            <div className="flex-desc">
+              <p>{item.Product.title}</p>
+              <p>{item.Product.category}</p>
+              <p>{item.Product.description}</p>
+              <p>${item.Product.price}</p>
+            </div>
+            <div className="quantity-btns">
+              <button onClick={() => subtractClickHandler(item)}>-</button>
+              <span>{item.quantity}</span>
+              <button onClick={() => addClickHandler(item)}>+</button>
+            </div>
+          </div>
+        ))}
       </div>
-    );
-  });
+    </div>
+  );
 
   const orderNavigationHandler = () => {
     navigate(`/order`);
   };
 
   const noItems = (
-    <div>
-      <p>Your cart is empty</p>
-      <Link to="/">Add items</Link>
+    <div className="flex-empty-cart">
+      <img className="empty-cart-photo" src={emptyCart} alt="empty-cart" />
+      <p>Your cart is empty!</p>
+      <Link to="/">Add Items</Link>
     </div>
   );
 
   const contentToRender = items?.length ? (
     <div>
-      {cart}
-      <p>
-        Subtotal ({totalItems} items) : ${totalPrice}
-      </p>
-      <button onClick={() => orderNavigationHandler()}>
-        Proceed to checkout
-      </button>
+      <div className="flex-cart-wrapper">
+        {cart}
+        <div className="flex-total">
+          <span>
+            Subtotal ({totalItems} items) : ${totalPrice}
+          </span>
+          <button onClick={() => orderNavigationHandler()}>
+            Proceed to checkout
+          </button>
+          <p>
+            <span>PLACE</span>
+            <span>YOUR</span>
+            <span>ADS</span> <span>HERE</span>
+          </p>
+        </div>
+      </div>
     </div>
   ) : (
-    noItems
+    <div>{noItems}</div>
   );
 
   return contentToRender;
