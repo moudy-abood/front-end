@@ -10,6 +10,10 @@ import { createOrder } from "../store/Actions/Order";
 import { createCart } from "../store/Actions/Cart";
 import { createAddress } from "../store/Actions/Address";
 
+import "../assets/css/order.css";
+
+//remove setselceted when opening the temp address
+
 function Order() {
   const dispatch = useDispatch();
   const token = checkToken();
@@ -17,12 +21,13 @@ function Order() {
 
   const { addresses } = useSelector((state) => state.addressReducer);
   const { items } = useSelector((state) => state.cartReducer);
-  const { error } = useSelector((state) => state.addressReducer);
+  const { error } = useSelector((state) => state.orderReducer);
   const errors = addressErrorHandler(error);
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showTempForm, setShowTempForm] = useState(false);
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
+  const [noAddress, setNoAddress] = useState(false);
   const [tempAddress, setTempAddress] = useState({
     country: "",
     city: "",
@@ -62,7 +67,7 @@ function Order() {
 
   const addressList = addresses?.map((address) => {
     return (
-      <div key={address.uuid}>
+      <div key={address.uuid} className="pick-address-card">
         <label>
           <input
             type="checkbox"
@@ -90,7 +95,13 @@ function Order() {
     if (result.success) {
       await dispatch(createCart());
       setIsOrderSuccess(true);
+    } else {
+      setNoAddress(true);
     }
+  };
+
+  const noAddressConfirmation = () => {
+    setNoAddress(false);
   };
 
   const handleTempAddressSubmit = async (e) => {
@@ -103,88 +114,138 @@ function Order() {
   };
 
   const tempAddressForm = (
-    <div>
-      <form onSubmit={handleTempAddressSubmit}>
-        <div>
-          <label>
-            Country
+    <div className="flex-container">
+      <div className="create-temp-address-card">
+        <h2 className="create-temp-address-title">Temporary Address</h2>
+        <form
+          className="create-temp-address-form"
+          onSubmit={handleTempAddressSubmit}
+        >
+          <div className="create-temp-address-input-group">
+            <label>Country</label>
             <input
               type="text"
               name="country"
               value={tempAddress.country}
               onChange={handleTempAddressChange}
+              className="create-temp-address-input"
             />
-          </label>
-          <span>{errors.country}</span>
-        </div>
-        <div>
-          <label>
-            City
+            <span className="create-temp-address-error">{errors.country}</span>
+          </div>
+          <div className="create-temp-address-input-group">
+            <label>City</label>
             <input
               type="text"
               name="city"
               value={tempAddress.city}
               onChange={handleTempAddressChange}
+              className="create-temp-address-input"
             />
-          </label>
-          <span>{errors.city}</span>
-        </div>
-        <div>
-          <label>
-            Street
+            <span className="create-temp-address-error">{errors.city}</span>
+          </div>
+          <div className="create-temp-address-input-group">
+            <label>Street</label>
             <input
               type="text"
               name="street"
               value={tempAddress.street}
               onChange={handleTempAddressChange}
+              className="create-temp-address-input"
             />
-          </label>
-          <span>{errors.street}</span>
-        </div>
-        <div>
-          <label>
-            Postal Code
+            <span className="create-temp-address-error">{errors.street}</span>
+          </div>
+          <div className="create-temp-address-input-group">
+            <label>Postal Code</label>
             <input
               type="text"
               name="postalCode"
               value={tempAddress.postalCode}
               onChange={handleTempAddressChange}
+              className="create-temp-address-input"
             />
-          </label>
-          <span>{errors.postalCode}</span>
-        </div>
-        <button onSubmit={handleTempAddressSubmit} type="submit">
-          Add this address to your list of addresses
+            <span className="create-temp-address-error">
+              {errors.postalCode}
+            </span>
+          </div>
+          <p className="total-price-tag">Total : ${totalPrice}</p>
+          <button
+            className="temp-address-btn"
+            onClick={handleTempAddressSubmit}
+            type="button"
+          >
+            Add this address to your list of addresses
+          </button>
+          <button
+            className="save-button"
+            type="button"
+            onClick={() => orderHandler(selectedAddress, totalPrice)}
+          >
+            Order using this temporary address
+          </button>
+          <button
+            className="cancel-button"
+            type="button"
+            onClick={() => setShowTempForm(!showTempForm)}
+          >
+            {showTempForm
+              ? "Cancel temporary address"
+              : "Use temporary address"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+
+  const noAddressSelected = (
+    <div className="confirmation-overlay">
+      <div className="confirmation-box">
+        <p className="confirmation-message">Please choose an Address !</p>
+        <button className="confirmation-btn" onClick={noAddressConfirmation}>
+          Okay
         </button>
-      </form>
-      <p>Total : ${totalPrice}</p>
-      <button onClick={() => orderHandler(selectedAddress, totalPrice)}>
-        Order using this temporary address
-      </button>
-      <button onClick={() => setShowTempForm(!showTempForm)}>
-        {showTempForm ? "Cancel temporary address" : "Use temporary address"}
-      </button>
+      </div>
     </div>
   );
 
   const contentToRender = (
     <div>
-      {showTempForm ? (
-        tempAddressForm
-      ) : (
-        <div>
-          {addressList}
-          <p>Total : ${totalPrice}</p>
-          <button onClick={() => setShowTempForm(!showTempForm)}>
-            {showTempForm
-              ? "Cancel temporary address form"
-              : "Add a temporary address"}
-          </button>
-          <button onClick={() => orderHandler(selectedAddress, totalPrice)}>
-            Order now
-          </button>
-        </div>
-      )}
+      <div>
+        {showTempForm ? (
+          tempAddressForm
+        ) : (
+          <div>
+            {noAddress ? (
+              noAddressSelected
+            ) : (
+              <div className="proceed-order-flex">
+                <div className="proceed-order-grid">{addressList}</div>
+                <div className="flex-temp-total">
+                  <span>Total : ${totalPrice}</span>
+                  <button
+                    className="order-now-btn"
+                    onClick={() => orderHandler(selectedAddress, totalPrice)}
+                  >
+                    Order now
+                  </button>
+                  <button
+                    className="temp-address-btn"
+                    onClick={() => setShowTempForm(!showTempForm)}
+                  >
+                    {showTempForm
+                      ? "Cancel temporary address form"
+                      : "Use a temporary address"}
+                  </button>
+                  <p>
+                    <span>PLACE</span>
+                    <span>YOUR</span>
+                    <span>ADS</span> <span>HERE</span>
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -194,10 +255,16 @@ function Order() {
   };
 
   const orderSuccessMessage = (
-    <div>
-      <h2>Order Confirmed!</h2>
-      <p>Your order has been placed successfully</p>
-      <button onClick={successMessageHandler}>Okay</button>
+    <div className="confirmation-overlay">
+      <div className="confirmation-box">
+        <h3 className="confirmation-message">Order Confirmed!</h3>
+        <p className="confirmation-message">
+          Your order has been placed successfully
+        </p>
+        <button className="confirmation-btn" onClick={successMessageHandler}>
+          Okay
+        </button>
+      </div>
     </div>
   );
 

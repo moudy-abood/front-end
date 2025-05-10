@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { authErrorHandler, checkToken } from "../../utils/helpers";
 import { fetchUser, updateUserCredentials } from "../../store/Actions/User";
 
+import "../../assets/css/profileCredentials.css";
+
 function EditCredentials() {
   const dispatch = useDispatch();
   const token = checkToken();
@@ -46,48 +48,56 @@ function EditCredentials() {
 
   return (
     <div>
-      <form onSubmit={handleSaveClick}>
-        <div>
-          <label>
-            Old password
-            <input
-              type="password"
-              name="oldPassword"
-              value={data?.oldPassword}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>
-            {errors.oldPassword.typo || errors.oldPassword.wrongPassword}
-          </span>
+      <div className="flex-container">
+        <div className="credentials-card">
+          <h2 className="credentials-title">Update Password</h2>
+          <form onSubmit={handleSaveClick} className="credentials-form">
+            <div className="credentials-input-group">
+              <label>Old Password</label>
+              <input
+                type="password"
+                name="oldPassword"
+                value={data.oldPassword}
+                onChange={inputChangeHandler}
+                className="credentials-input"
+              />
+              <span className="credentials-error">
+                {errors.oldPassword.typo || errors.oldPassword.wrongPassword}
+              </span>
+            </div>
+            <div className="credentials-input-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                name="newPassword"
+                value={data.newPassword}
+                onChange={inputChangeHandler}
+                className="credentials-input"
+              />
+              <span className="credentials-error">{errors.newPassword}</span>
+            </div>
+            <div className="credentials-input-group">
+              <label>Re-enter New Password</label>
+              <input
+                type="password"
+                name="reEnteredPassword"
+                value={data.reEnteredPassword}
+                onChange={inputChangeHandler}
+                className="credentials-input"
+              />
+              <span className="credentials-error">
+                {errors.reEnteredPassword}
+              </span>
+            </div>
+            <button type="submit" className="save-button">
+              Save
+            </button>
+            <button onClick={handleCancelClick} className="cancel-button">
+              Cancel
+            </button>
+          </form>
         </div>
-        <div>
-          <label>
-            New password
-            <input
-              type="password"
-              name="newPassword"
-              value={data?.newPassword}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.newPassword}</span>
-        </div>
-        <div>
-          <label>
-            Re-enter password
-            <input
-              type="password"
-              name="reEnteredPassword"
-              value={data?.reEnteredPassword}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.reEnteredPassword}</span>
-        </div>
-        <button type="submit">Save</button>
-      </form>
-      <button onClick={handleCancelClick}>Cancel</button>
+      </div>
     </div>
   );
 }

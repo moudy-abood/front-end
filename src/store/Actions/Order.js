@@ -11,13 +11,13 @@ export const createOrder = (data) => {
       dispatch({
         type: actionTypes.CREATE_ORDER_SUCCESS,
       });
-      return { success: true }
+      return { success: true };
     } catch (error) {
       dispatch({
         type: actionTypes.CREATE_ORDER_FAIL,
-        error: error.message,
+        error: error?.validation?.body?.message,
       });
-      return { success: false }
+      return { success: false };
     }
   };
 };
@@ -36,6 +36,26 @@ export const fetchOrders = () => {
     } catch (error) {
       dispatch({
         type: actionTypes.FETCH_ORDERS_FAIL,
+        error: error.message,
+      });
+    }
+  };
+};
+
+export const fetchOrder = (uuid) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.FETCH_ORDER,
+    });
+    try {
+      const response = await services.getOrderService(uuid);
+      dispatch({
+        type: actionTypes.FETCH_ORDER_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.FETCH_ORDER_FAIL,
         error: error.message,
       });
     }

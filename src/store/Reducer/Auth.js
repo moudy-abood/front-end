@@ -8,7 +8,7 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SIGNUP_START:
+    case actionTypes.SIGNUP:
       return {
         ...state,
         loading: true,
@@ -26,11 +26,6 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         error: action?.error,
       };
-    case actionTypes.LOGOUT:
-      return {
-        ...state,
-        error: null,
-      };
     case actionTypes.LOGIN:
       return {
         ...state,
@@ -47,6 +42,25 @@ const authReducer = (state = initialState, action) => {
     case actionTypes.LOGIN_SUCCESS:
       return {
         ...state,
+        loading: false,
+        error: null,
+      };
+    case actionTypes.SIGNOUT:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case actionTypes.SIGNOUT_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action?.error,
+      };
+    case actionTypes.SIGNOUT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         error: null,
       };
     default:

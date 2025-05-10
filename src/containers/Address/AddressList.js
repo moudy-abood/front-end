@@ -7,6 +7,9 @@ import { updateAddress } from "../../store/Actions/Address";
 import Confirmation from "../../components/Confirmation";
 import { addressErrorHandler, checkToken } from "../../utils/helpers";
 
+import "../../assets/css/addressList.css";
+import noAddressFound from "../../assets/images/no-address.webp";
+
 function AddressList() {
   const dispatch = useDispatch();
   const token = checkToken();
@@ -58,6 +61,10 @@ function AddressList() {
     }
   };
 
+  const handleNavigation = () => {
+    navigate("/create-address")
+  }
+
   const editAddressHandler = async (uuid) => {
     setShowEditAddress(true);
     setSelectedUuid(uuid);
@@ -75,89 +82,109 @@ function AddressList() {
     }
   };
 
-  const addressList = addresses?.map((address) => {
-    return (
-      <div key={address.uuid}>
-        <p>{address.country}</p>
-        <p>{address.city}</p>
-        <p>{address.street}</p>
-        <p>{address.postalCode}</p>
-        <button onClick={() => editAddressHandler(address.uuid)}>edit</button>
-        <button onClick={() => selectedUuidHandler(address.uuid)}>
-          Remove
-        </button>
+  const addressList = (
+    <div className={`address-grid ${addresses.length % 2 === 1 ? "odd" : "even"}`}>
+      <div className="add-address" onClick={handleNavigation}>
+        <span className="plus-span">+</span>
+        <Link to="/create-address">Add Address</Link>
       </div>
-    );
-  });
+      {addresses?.map((address) => {
+        return (
+          <div className="address-card" key={address.uuid}>
+            <p>{address.country}</p>
+            <p>{address.city}</p>
+            <p>{address.street}</p>
+            <p>{address.postalCode}</p>
+            <button
+              className="edit-address-btn"
+              onClick={() => editAddressHandler(address.uuid)}
+            >
+              Edit
+            </button>
+            <button
+              className="remove-address-btn"
+              onClick={() => selectedUuidHandler(address.uuid)}
+            >
+              Remove
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
 
   const addressForm = (
-    <div>
-      <form onSubmit={handleSaveClick}>
-        <div>
-          <label>
-            Country
+    <div className="flex-container">
+      <div className="edit-address-card">
+        <h2 className="edit-address-title">Edit Address</h2>
+        <form className="edit-address-form" onSubmit={handleSaveClick}>
+          <div className="edit-address-input-group">
+            <label>Country</label>
             <input
               type="text"
               name="country"
               value={data?.country}
               onChange={inputChangeHandler}
+              className="edit-address-input"
             />
-          </label>
-          <span>{errors.country}</span>
-        </div>
-        <div>
-          <label>
-            City
+            <span className="edit-address-error">{errors.country}</span>
+          </div>
+          <div className="edit-address-input-group">
+            <label>City</label>
             <input
               type="text"
               name="city"
               value={data?.city}
               onChange={inputChangeHandler}
+              className="edit-address-input"
             />
-          </label>
-          <span>{errors.city}</span>
-        </div>
-        <div>
-          <label>
-            Street
+            <span className="edit-address-error">{errors.city}</span>
+          </div>
+          <div className="edit-address-input-group">
+            <label>Street</label>
             <input
               type="text"
               name="street"
               value={data?.street}
               onChange={inputChangeHandler}
+              className="edit-address-input"
             />
-          </label>
-          <span>{errors.street}</span>
-        </div>
-        <div>
-          <label>
-            postalCode
+            <span className="edit-address-error">{errors.street}</span>
+          </div>
+          <div className="edit-address-input-group">
+            <label>postalCode</label>
             <input
               type="text"
               name="postalCode"
               value={data?.postalCode}
               onChange={inputChangeHandler}
+              className="edit-address-input"
             />
-          </label>
-          <span>{errors.postalCode}</span>
-        </div>
-        <button type="submit">Save</button>
-      </form>
-      <button onClick={cancelHandler}>Cancel</button>
+            <span className="edit-address-error">{errors.postalCode}</span>
+          </div>
+          <button className="save-button" type="submit">
+            Save
+          </button>
+          <button type="button" onClick={cancelHandler} className="cancel-button">
+            Cancel
+          </button>
+        </form>
+      </div>
     </div>
   );
 
   const renderedAddress = (
     <div>
       {showEditAddress ? (
-        addressForm
+        <div>
+          {addressForm}
+        </div>
       ) : (
         <div>
           {addressList}
-          <Link to="/create-address">Add address</Link>
         </div>
       )}
-
+    
       {confirm ? (
         <Confirmation
           message="Are you sure you want to delete this address?"
@@ -170,8 +197,11 @@ function AddressList() {
 
   const noAddresses = (
     <div>
-      <p> you don't have any addresses yet </p>
-      <Link to="/create-address">Add address</Link>
+    <div className="flex-no-address">
+      <img className="no-address-photo" src={noAddressFound} alt="no-address"/>
+      <p> You don't have any address! </p>
+      <Link to="/create-address">Add Address</Link>
+    </div>
     </div>
   );
 

@@ -14,6 +14,7 @@ export const getCartService = async () => {
     const cart = await API.get(`/cart`);
     return cart.data;
   } catch (error) {
+    localStorage.removeItem("token")
     return Promise.reject(error);
   }
 };

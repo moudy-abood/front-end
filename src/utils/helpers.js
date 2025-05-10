@@ -54,5 +54,6 @@ export const addressErrorHandler = (error) => {
     city: error?.includes("city") ? error : "",
     street: error?.includes("street") ? error : "",
     postalCode: error?.includes("postalCode") ? error : "",
+    tempCountry: error?.includes('tempAddress')? error:""
   };
 };
