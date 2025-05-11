@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+
+import searchIcon from "../../assets/images/search.svg";
+import "../../assets/css/searchBar.css";
 
 function SearchBar() {
-  const [, setSearchParams] = useSearchParams();
 
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchHandler = (e) => {
     e.preventDefault();
-    setSearchParams({ search: searchTerm });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('search', searchTerm);
+    if (window.location.pathname !== '/') {
+      navigate(`/?${newParams.toString()}`);
+    } else {
+      setSearchParams({ search: searchTerm });
+    }
   };
 
   const inputChangeHandler = (e) => {
@@ -17,6 +28,8 @@ function SearchBar() {
 
   const searchInput = (
     <input
+    className="search-input"
+      name="search"
       type="text"
       placeholder="Search"
       value={searchTerm}
@@ -25,9 +38,11 @@ function SearchBar() {
   );
 
   return (
-    <form onSubmit={searchHandler}>
+    <form onSubmit={searchHandler} className="search-form">
+      <div className="search-bar">
       {searchInput}
-      <button type="submit">🔎</button>
+      <button type="submit" className="search-button"><img src={searchIcon} alt="search" className="search-icon"/></button>
+      </div>
     </form>
   );
 }

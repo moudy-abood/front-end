@@ -4,7 +4,7 @@ import API from "../Services/API";
 export const signUp = (data) => {
   return async (dispatch) => {
     dispatch({
-      type: actionTypes.SIGNUP_START,
+      type: actionTypes.SIGNUP,
     });
     try {
       const signUpData = {
@@ -16,6 +16,7 @@ export const signUp = (data) => {
 
       const response = await API.post("/user", signUpData);
       localStorage.setItem("token", response.data.token);
+      window.dispatchEvent(new Event("auth-change"));
       dispatch({
         type: actionTypes.SIGNUP_SUCCESS,
       });
@@ -42,6 +43,7 @@ export const login = (data) => {
       };
       const response = await API.post("/login", loginData);
       localStorage.setItem("token", response.data.token);
+      window.dispatchEvent(new Event("auth-change"));
       dispatch({
         type: actionTypes.LOGIN_SUCCESS,
       });
@@ -57,9 +59,22 @@ export const login = (data) => {
   };
 };
 
-export const logout = () => {
-  localStorage.removeItem("token");
-  return {
-    type: actionTypes.LOGOUT,
+export const signOut = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.SIGNOUT,
+    });
+    try {
+      localStorage.removeItem("token");
+      window.dispatchEvent(new Event("auth-change"));
+      dispatch({
+        type: actionTypes.SIGNOUT_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: actionTypes.SIGNOUT_FAIL,
+        error,
+      });
+    }
   };
 };

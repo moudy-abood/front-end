@@ -6,6 +6,8 @@ import { createAddress } from "../../store/Actions/Address";
 import { checkToken } from "../../utils/helpers";
 import { addressErrorHandler } from "../../utils/helpers";
 
+import "../../assets/css/createAddress.css";
+
 function CreateAddress() {
   const { error } = useSelector((state) => state.addressReducer);
   const errors = addressErrorHandler(error);
@@ -46,60 +48,67 @@ function CreateAddress() {
 
   return (
     <div>
-      <form onSubmit={submitHandler}>
-        <div>
-          <label>
-            Country
-            <input
-              type="text"
-              name="country"
-              value={data.country}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.country}</span>
+      <div className="flex-container">
+        <div className="create-address-card">
+          <h2 className="create-address-title">Create Address</h2>
+          <form className="create-address-form" onSubmit={submitHandler}>
+            <div className="create-address-input-group">
+              <label>Country</label>
+              <input
+                type="text"
+                name="country"
+                value={data.country}
+                onChange={inputChangeHandler}
+                className="create-address-input"
+              />
+              <span className="create-address-error">{errors.country}</span>
+            </div>
+            <div className="create-address-input-group">
+              <label>City</label>
+              <input
+                type="text"
+                name="city"
+                value={data.city}
+                onChange={inputChangeHandler}
+                className="create-address-input"
+              />
+              <span className="create-address-error">{errors.city}</span>
+            </div>
+            <div className="create-address-input-group">
+              <label>Street</label>
+              <input
+                type="text"
+                name="street"
+                value={data.street}
+                onChange={inputChangeHandler}
+                className="create-address-input"
+              />
+              <span className="create-address-error">{errors.street}</span>
+            </div>
+            <div className="create-address-input-group">
+              <label>Postal Code</label>
+              <input
+                type="text"
+                name="postalCode"
+                value={data.postalCode}
+                onChange={inputChangeHandler}
+                className="create-address-input"
+              />
+              <span className="create-address-error">{errors.postalCode}</span>
+            </div>
+            <button className="save-button" type="submit">
+              Add
+            </button>
+            <button
+              className="cancel-button"
+              onClick={cancelHandler}
+              type="button"
+            >
+              Cancel
+            </button>
+          </form>
         </div>
-        <div>
-          <label>
-            City
-            <input
-              type="text"
-              name="city"
-              value={data.city}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.city}</span>
-        </div>
-        <div>
-          <label>
-            Street
-            <input
-              type="text"
-              name="street"
-              value={data.street}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.street}</span>
-        </div>
-        <div>
-          <label>
-            Postal Code
-            <input
-              type="text"
-              name="postalCode"
-              value={data.postalCode}
-              onChange={inputChangeHandler}
-            />
-          </label>
-          <span>{errors.postalCode}</span>
-        </div>
-        <button onSubmit={submitHandler} type="submit">
-          Add
-        </button>
-      </form>
-      <button onClick={cancelHandler}>Cancel</button>
+      </div>
     </div>
   );
 }
